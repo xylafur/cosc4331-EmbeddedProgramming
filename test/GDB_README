@@ -1,0 +1,17 @@
+after starting up qemu on a particular port
+    (have to use the debug flag and specify a port as shown in the make file)
+
+start up gdb
+type: file <executable name>
+type: target remove localhost:<portnumber>
+
+
+So to run this example run:
+    $ make qemu
+
+in a terminal.  Then go to another terminal and run:
+    $ arm-none-eabi-gdb
+    (gdb) file test
+    (gdb) target remove localhost:1234
+
+To see the registers, type `layout regs`
