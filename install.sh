@@ -15,7 +15,7 @@ if [ -f /etc/fedora-release ]; then
     INSTALL=dnf install
 elif [ -f /etc/arch-release ]; then
     OS="ARCH"
-    INSTALL=pacman -S
+    INSTALL="pacman -S"
 else
     echo "Don't know how to install stuff for this os.. sorry"
     exit 1
@@ -50,6 +50,7 @@ all)
     bash $0 qemu
     bash $0 arm-cc
     bash $0 arm-gdb
+    exit 0
     ;;
 *)
     echo "Don't know how to install: $OPER"
