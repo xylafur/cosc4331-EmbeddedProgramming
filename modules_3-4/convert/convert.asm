@@ -3,7 +3,7 @@
 ;@ as the variable n and then determines the distace to the wall
 ;@ The max mesaurement of distance for the sensor is 800mm so if the value given
 ;@ from the the ADC is less than 2552, return 800
-   
+
 
         .data
 ;@All of my constants
@@ -31,7 +31,7 @@ convert:
         ;@ we assume that n was passed in as R0
         LDR R1, =C3                         ;@ 2552
         CMP R0, R1
-        
+
         BLT invalid                         ;@ bif R0 < R1
 
         LDR R2, =C2                         ;@ 1058
@@ -39,7 +39,7 @@ convert:
 
         LDR R3, =C1                         ;@ 1195172
 
-        UDIV R0, R3, R4                     ;@ 1195172 / (n - 1058)
+        SDIV R0, R3, R4                     ;@ 1195172 / (n - 1058)
 
         BX LR
 
