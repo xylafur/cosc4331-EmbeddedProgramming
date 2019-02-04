@@ -1,5 +1,8 @@
-.text
-.global _start
+        .data
+val:    .word   25565
+        .text
+        .global _start
 _start:
-    mov r0,#1
-    b _start
+        ldr r0,=val
+        b _start
+

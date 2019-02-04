@@ -3,24 +3,46 @@
 ;@ as the variable n and then determines the distace to the wall
 ;@ The max mesaurement of distance for the sensor is 800mm so if the value given
 ;@ from the the ADC is less than 2552, return 800
+   
 
-.text
-.global main
+        .data
+;@All of my constants
+.set    C1,     1195172
+.set    C2,     1058
+.set    C3,     2552
+.set    TEST,   2551
+.set    DEFAULT,800
 
-;@ I am assuming that the number from the ADC is unsigned!  Probably this is
-;@ correct because we won't have a 'negative' distance
-main:   .asmfunc
-        MOV R0,#2551
-        BL  convert
-        .endasmfunc
+        .text
+        .align
+_start: .global _start
+        .global main
+        .global convert
+        b main
 
-convert:.asmfunc
-        ;@ we assume that n was passed in as R0
-        CMP R0, #2552
-        ;@ since this is unsigned
-        BCS invalid
-        SUB R2, R0, #1058
-invalid:
-        MOV R0,#800
+        .type main, %function
+main:
+        LDR R0,=TEST
+        BL convert
         BX LR
-        .endasmfunc
+
+        .type convert, %function
+convert:
+        ;@ we assume that n was passed in as R0
+        LDR R1, =C3                         ;@ 2552
+        CMP R0, R1
+        
+        BLT invalid                         ;@ bif R0 < R1
+
+        LDR R2, =C2                         ;@ 1058
+        SUB R4, R0, R2                      ;@ R4 = n - 1058
+
+        LDR R3, =C1                         ;@ 1195172
+
+        UDIV R0, R3, R4                     ;@ 1195172 / (n - 1058)
+
+        BX LR
+
+invalid:
+        LDR R0, =DEFAULT
+        BX LR

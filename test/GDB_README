@@ -12,6 +12,6 @@ So to run this example run:
 in a terminal.  Then go to another terminal and run:
     $ arm-none-eabi-gdb
     (gdb) file test
-    (gdb) target remove localhost:1234
+    (gdb) target remote localhost:1234
 
 To see the registers, type `layout regs`
