@@ -45,7 +45,8 @@ arm-cc)
     if [ $OS = "FEDORA" ]; then
         PACKAGE=arm-none-eabi-gcc-cs
     elif [ $OS = "ARCH" ]; then
-        PACKAGE=arm-none-eabi-binutils
+        #Grab binary utils, compiler and the C library for ARM
+        PACKAGE="arm-none-eabi-binutils arm-none-eabi-gcc arm-none-eabi-newlib"
     elif [ $OS = "UBUNTU" ]; then
         PACKAGE=gcc-arm-none-eabi
     fi
