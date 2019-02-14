@@ -1,0 +1,14 @@
+To run this program, make sure you have all of the programs mentioned in the
+install script from the root of this project!
+
+Then run 'make qemu' in one terminal
+    - this will build the ARM executable using the cross compiler
+
+And run 'make gdb' in another terminal
+    - this will start arm-gdb, link it up with the qemu session, then set a
+      breakpoint at where errors are counted, then will print out the number of
+      errors encountered
+
+
+If you want to debug or check out a particular part of the program, you will
+have to edit the file: 'gdb-file' or just envoke gdb yourself

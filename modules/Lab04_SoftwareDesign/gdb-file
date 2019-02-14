@@ -1,0 +1,6 @@
+file Lab04-arm.exe
+target remote localhost:1234
+break 238
+c
+echo \nPRINTING ERRORS\n
+p errors

@@ -43,7 +43,6 @@ those of the authors and should not be interpreted as representing official
 policies, either expressed or implied, of the FreeBSD Project.
 */
 
-#define ARM 1
 #include <stdint.h>
 #include <stdio.h>
 void main(void){
@@ -115,7 +114,14 @@ int32_t Convert(int32_t n){
  * Joint} (center sensor less than 600 mm) and {Straight, Right Joint, Left
  * Joint, and Cross Road} (center sensor more than 600 mm). 
  */
+#define VALUE_ERROR(n) (n < 50 || n > 800)
+#define ANY_VALUE_ERROR(l, r, m) (VALUE_ERROR(l) || VALUE_ERROR(r) || VALUE_ERROR(m))
+
 scenario_t Classify(int32_t Left, int32_t Center, int32_t Right){
+    if(ANY_VALUE_ERROR(Left, Right, Center)){
+        return Error;
+    }
+
     scenario_t result = 0;
     if(Left < SIDEMIN){
         result |= LeftTooClose;
@@ -131,35 +137,41 @@ scenario_t Classify(int32_t Left, int32_t Center, int32_t Right){
         //then it is some mask
         return result;
     }
-    int right_blocked, left_blocked, center_blocked;
-    right_blocked = left_blocked = center_blocked = 0;
-    if(Left < SIDEMAX){
-        left_blocked = 1;
-    }
-    if(Right < SIDEMAX){
-        right_blocked = 1;
-    }
-    if(Center < CENTEROPEN){
-        center_blocked = 1;
+
+    // only need 3 bits for this, might as well try to be as optimal as
+    // possible.  We can be intelligent about this and use a bitmask to
+    // represent the various states
+    unsigned char blocked = (Center < CENTEROPEN) << 2  |
+                            (Right < SIDEMAX) << 1      |
+                            (Left < SIDEMAX);
+
+    switch(blocked) {
+    case 7:
+        result = Blocked;
+        break;
+    case 6:
+        result = LeftTurn;
+        break;
+    case 5:
+        result = RightTurn;
+        break;
+    case 4:
+        result = TeeJoint;
+        break;
+    case 3:
+        result = Straight;
+        break;
+    case 2:
+        result = LeftJoint;
+        break;
+    case 1:
+        result = RightJoint;
+        break;
+    case 0:
+        result = CrossRoad;
+        break;
     }
 
-    if(center_blocked && right_blocked && left_blocked){
-        result = Blocked;
-    }else if(center_blocked && left_blocked){
-        result = RightTurn;
-    }else if(center_blocked && right_blocked){
-        result = LeftTurn;
-    }else if(right_blocked && left_blocked){
-        result = Straight;
-    }else if(center_blocked){
-        result = TeeJoint;
-    }else if(right_blocked){
-        result = LeftJoint;
-    }else if(left_blocked){
-        result = RightJoint;
-    }else{
-        result = CrossRoad;
-    }
     return result;
 }
 
@@ -190,6 +202,7 @@ void Program4_1(void){
 
 
 
+//211 212 800
 // ***********testing of classify
 scenario_t Solution(int32_t Left, int32_t Center, int32_t Right);
 int32_t const CornerCases[18]={49,50,51,149,150,151,211,212,213,353,354,355,599,600,601,799,800,801};
@@ -200,11 +213,13 @@ void Program4_2(void){
   int i,j,k;
   int32_t left, right, center; // sensor readings
   errors = 0;
-  for(i=0; i<18; i++){
+
+  int start = 6;
+  for(i=start; i<18; i++){
     left = CornerCases[i];
-    for(j=0; j<18; j++){
+    for(j=start; j<18; j++){
       center = CornerCases[j];
-      for(k=0; k<18; k++){
+      for(k=start; k<18; k++){
         right = CornerCases[k];
         result = Classify(left,center,right); // your solution
         truth = Solution(left,center,right);  // correct answer
