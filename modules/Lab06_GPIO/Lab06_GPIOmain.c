@@ -60,55 +60,6 @@ policies, either expressed or implied, of the FreeBSD Project.
 #include "..\inc\Clock.h"
 #include "..\inc\TExaS.h"
 
-void Reflectance_Init()
-{
-    //Select pin 3 from port 5
-    P5->SEL0 &= ~(1 << 3);
-    P5->SEL1 &= ~(1 << 3);
-
-    //Make the IR led output
-    P5->DIR &= ~(1 << 3);
-
-    //Set all pins on port 7 low
-    P7->SEL0 = 0;
-    P7->SEL1 = 0;
-}
-
-
-/*  The sensor we will use is about 66 mm wide (with about 9.5mm between
- *  sensors), so we should be able to estimate the robot position of -33 to
- *  +33mm
- */
-uint8_t Reflectance_Read(uint32_t sleep_time)
-{
-    uint8_t data = 0;
-
-    P5->OUT |= (1 << 3);
-
-    P7->DIR = 0;
-    P7->OUT = 0xFF;
-
-    Clock_Delay1us(10);
-
-    P7->DIR = 0xFF;
-    Clock_Delay1us(sleep_time);
-
-
-    data = P7->IN;
-
-    P5->OUT &= ~(1 << 3);
-
-    return data;
-}
-
-int32_t W [8] = {332, 237, 142, 47, -47, -142, -237, -332};
-
-int32_t Determine_distance(int32_t data)
-{
-    return 0;
-}
-
-
 
 uint8_t Data; // QTR-8RC
 // Test main for section 6.4.3
