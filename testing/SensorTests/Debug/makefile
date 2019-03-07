@@ -137,7 +137,6 @@ BIN_OUTPUTS__QUOTED += \
 
 # All Target
 all: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
-	echo $(OBJS)
 	@$(MAKE) --no-print-directory -Onone "Lab06_GPIO.out"
 
 # Tool invocations

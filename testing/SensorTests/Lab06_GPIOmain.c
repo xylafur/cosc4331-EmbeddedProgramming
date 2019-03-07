@@ -60,7 +60,6 @@ policies, either expressed or implied, of the FreeBSD Project.
 #include "../inc/Clock.h"
 #include "../inc/TExaS.h"
 
-
 uint8_t Data; // QTR-8RC
 // Test main for section 6.4.3
 int Program6_1(void){
@@ -74,10 +73,28 @@ int Program6_1(void){
 }
 
 int32_t Position; // 332 is right, and -332 is left of center
-int main(void){
+
+/*  This is for me to test our sensor a bit
+ */
+int main(){
+    Clock_Init48MHz();
+    LineSensorTest_Init();
+
+    while(1){
+        LineSensorTest(1000);
+        Clock_Delay1ms(10);
+    }
+
+
+}
+
+int othermain(){
+//int main(void){
   Clock_Init48MHz();
   Reflectance_Init();
   TExaS_Init(LOGICANALYZER_P7);
+
+
   while(1){
     Data = Reflectance_Read(1000);
     Position = Reflectance_Position(Data);
