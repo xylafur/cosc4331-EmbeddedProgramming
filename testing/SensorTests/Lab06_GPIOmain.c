@@ -72,6 +72,127 @@ int Program6_1(void){
   }
 }
 
+
+
+#define DARK 0x00
+#define RED 0x01
+#define BLUE 0x04
+#define GREEN 0x02
+#define YELLOW 0x03
+#define SKYBLUE 0x06
+#define WHITE 0x07
+#define PINK 0x05
+
+
+enum States {
+    OffLeft_s,    //0
+    FarLeft_s,    //1
+    Left_s,       //2
+    Center1_s,    //3
+    Center2_s,    //4
+    Right_s,      //5
+    FarRight_s,   //6
+    OffRight_s,   //7
+};
+
+#define NUM_STATES 8
+
+/* If we get a reading of zero, it means that no sensors are triggered.  The
+ * Position function is guaranteed to return a non zero number if there are at
+ * least some sensors triggered (meaning that it is perfectly canceling out)
+ *
+ * This edges enum is just used to index the state's array.  Each state can
+ * have different behavior for what to do if it gets a reading of 0
+ */
+#define NUM_EDGES 6
+enum Edges {
+    Off_e,
+    FarLeft_e,
+    Left_e,
+    Center_e,
+    Right_e,
+    FarRight_e,
+
+    Error_e
+};
+
+#define SLEEPTIME 500
+
+#define MAX_NAME_LEN 16
+struct State {
+    char name [MAX_NAME_LEN];
+    uint32_t out;
+    uint32_t delay;
+    const struct State *next[NUM_EDGES];
+};
+
+typedef const struct State State_t;
+
+#define OffLeft &fsm[0]
+#define FarLeft &fsm[1]
+#define Left &fsm[2]
+#define Center1 &fsm[3]
+#define Center2 &fsm[4]
+#define Right &fsm[5]
+#define FarRight &fsm[6]
+#define OffRight &fsm[7]
+
+#define GET_TRANS(center, zero) {zero, FarLeft, Left, center, Right,  \
+                                 FarRight}
+
+State_t fsm [NUM_STATES] = {
+    {"Off Left", PINK, SLEEPTIME, GET_TRANS(Center1, OffLeft)},
+    {"Far Left", RED, SLEEPTIME, GET_TRANS(Center1, OffLeft)},
+
+    {"Left", YELLOW, SLEEPTIME, GET_TRANS(Center1, OffLeft)},
+
+    {"Center1", WHITE, SLEEPTIME, GET_TRANS(Center2, OffLeft)},
+    {"Center2", DARK, SLEEPTIME, GET_TRANS(Center1, OffRight)},
+
+    {"Right", GREEN, SLEEPTIME, GET_TRANS(Center2, OffRight)},
+
+    {"Far Right", BLUE, SLEEPTIME, GET_TRANS(Center2, OffRight)},
+    {"Off Right", SKYBLUE, SLEEPTIME, GET_TRANS(Center2, OffRight)},
+};
+
+#undef OffLeft
+#undef FarLeft
+#undef Left
+#undef Center1
+#undef Center2
+#undef Right
+#undef FarRight
+#undef OffRight
+
+#define AVG(a, b) ((a + b)/2)
+#define BETWEEN(pos, max, min) (pos > min && pos < max)
+
+enum Edges edge_encoder(int32_t pos){
+    if(pos == 0){
+        return Off_e;
+
+    }else if(BETWEEN(pos, 333, AVG(237, 142))){
+        return FarRight_e;
+
+    }else if(BETWEEN(pos, AVG(237, 142) + 1, 47)){
+        return Right_e;
+
+    }else if(BETWEEN(pos, 48, -48)){
+        return Center_e;
+
+    }else if(BETWEEN(pos, -47, AVG(-142, -237) + 1)){
+        return Left_e;
+
+    }else if(BETWEEN(pos, AVG(-142, -237), -333)){
+        return FarLeft_e;
+
+    //Should never be possible to get here
+    //TODO: Investigate if I can include asserts
+    }else{
+        return Error_e;
+    }
+}
+
 int32_t Position; // 332 is right, and -332 is left of center
 
 /*  This is for me to test our sensor a bit
@@ -80,47 +201,19 @@ int main(){
     Clock_Init48MHz();
     LineSensorTest_Init();
 
+    uint8_t data;
+    int32_t position;
+    enum Edges this_edge;
+    State_t *current_state = &fsm[3];
+
     while(1){
-        LineSensorTest(1000);
-        Clock_Delay1ms(10);
+        set_color(current_state->out);
+        Clock_Delay1ms(current_state->delay);
+
+        data = Reflectance_Read(1000);
+        position = Reflectance_Position(data);
+        this_edge = edge_encoder(position);
+
+        current_state = &fsm[this_edge];
     }
-
-
 }
-
-int othermain(){
-//int main(void){
-  Clock_Init48MHz();
-  Reflectance_Init();
-  TExaS_Init(LOGICANALYZER_P7);
-
-
-  while(1){
-    Data = Reflectance_Read(1000);
-    Position = Reflectance_Position(Data);
-    Clock_Delay1ms(10);
-  }
-}
-
-int main2(void){ // main2(void){
-    int32_t i;
-  Clock_Init48MHz();
-  Reflectance_Init();
-  P4->SEL0 &= ~0x01;
-  P4->SEL1 &= ~0x01;    //  P4.0 as GPIO
-  P4->DIR |= 0x01;      //  make P4.0 out
-  TExaS_Init(LOGICANALYZER_P7);
-  while(1){
-    P5->OUT |= 0x08;      // turn on 8 IR LEDs
-    P7->DIR = 0xFF;       // make P7.7-P7.0 out
-    P7->OUT = 0xFF;       // prime for measurement
-    Clock_Delay1us(10);   // wait 10 us
-    P7->DIR = 0x00;       // make P7.7-P7.0 in
-    for(i=0;i<10000;i++){
-      P4->OUT = P7->IN&0x01; // convert input to digital
-    }
-    P5->OUT &= ~0x08;     // turn off 8 IR LEDs
-    Clock_Delay1ms(10);
-  }
-}
-

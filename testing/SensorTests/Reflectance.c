@@ -140,31 +140,33 @@ void set_color(uint8_t sensor_data){
     if(sensor_data == 0xFF | sensor_data == 0x0){
         led_color = 0;
 
-    }else if(sensor_data & 0x1){
-        led_color |= 0x1;
+    }else{
+        if(sensor_data & 0x1){
+            led_color |= 0x1;
 
-    }else if(sensor_data & 0x2){
-        led_color |= 0x2;
+        }if(sensor_data & 0x2){
+            led_color |= 0x2;
 
-    }else if(sensor_data & 0x4){
-        led_color |= 0x4;
+        }if(sensor_data & 0x4){
+            led_color |= 0x4;
 
-    // At this point, there are no more possible color combinations..
-    }else if(sensor_data & 0x8){
-        led_color |= 0x1;
+        // At this point, there are no more possible color combinations..
+        }if(sensor_data & 0x8){
+            led_color |= 0x1;
 
-    }else if(sensor_data & 0x10){
-        led_color |= 0x2;
+        }if(sensor_data & 0x10){
+            led_color |= 0x2;
 
-    }else if(sensor_data & 0x20){
-        led_color |= 0x4;
+        }if(sensor_data & 0x20){
+            led_color |= 0x4;
 
-    //ran out of colors again
-    }else if(sensor_data & 0x40){
-        led_color |= 0x1;
+        //ran out of colors again
+        }if(sensor_data & 0x40){
+            led_color |= 0x1;
 
-    }else if(sensor_data & 0x80){
-        led_color |= 0x2;
+        }if(sensor_data & 0x80){
+            led_color |= 0x2;
+        }
     }
 
     //The led's are the last 3 bits of P2, so P2.0, P2.1 and P2.2
@@ -218,6 +220,12 @@ int32_t Reflectance_Position(uint8_t data){
         }
 
     }
+    //For the edge case of when both of the center sensors are triggered,
+    //resulting in an average of 0
+    if(ones > 0 && sum == 0){
+        sum = ones;
+    }
+
     // d = sum(i=0..7, bi * wi) / sum(i=0..7, bi)
     return sum / ones;
 
