@@ -73,7 +73,7 @@ void Reflectance_Init(void){
     P5->SEL1 &= ~(1 << 3);
 
     //Make the IR led output
-    P5->DIR |= (1 << 3);atom
+    P5->DIR |= (1 << 3);
 
     //Set all pins on port 7 low
     P7->SEL0 = 0;
