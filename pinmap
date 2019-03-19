@@ -1,0 +1,63 @@
+Green Yellow Orange
+    Right from daughter board
+
+    P1.6, 2.6, 3.6
+
+    G - PWM - 2.6
+    Y - DIR - 1.6
+    O - !SLP - 3.6
+
+Gray Purple Blue
+    Left from daughter board
+
+    Blue    - PWM   - 2.7
+    Purple  - DIR   - 1.7
+    Gray    - !SLP  - 3.7
+
+Red Brown
+    Red - Daughter Board VCC to mother board 3.3V
+
+    Brown - Daughter board VCC MD to mother board 3.3V
+
+Black White
+    Black - Daughter Board Grnd - Mother Board Grnd
+    White - Daughter Board vreg - Mother Board 5V
+
+Brown Red Oarnge Yellow Green Blue Purple Gray White Black Brown
+    Line Sensors
+
+    Brown -         Grnd
+    Black -         3.3V
+    White - LED -   5.3
+
+    Gray    -       7.0
+    Purple  -       7.1
+    Blue    -       7.2
+    Green   -       7.3
+    Yellow  -       7.4
+    Oarnge  -       7.5
+    Red     -       7.6
+    Brown   -       7.7
+
+Yellow Oarnge Red Brown Black White
+    Wires attached to wires which are attached to the positive end of the bump
+    sensors
+
+    Visable   Bump
+    ----------------
+    White   - Green
+    Black   - Yellow
+    Brown   - Orange
+    Red     - Red
+    Orange  - Brown
+    Yellow  - Black
+
+    Visable         Pin
+    ----------------------
+    White       -   4.5
+    Black       -   4.4
+    Brown       -   4.3
+    Red         -   4.2
+    Orange      -   4.1
+    Yellow  -       4.0
+
