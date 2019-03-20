@@ -61,3 +61,32 @@ Yellow Oarnge Red Brown Black White
     Orange      -   4.1
     Yellow  -       4.0
 
+Driver Board:
+    Driver Board Name       DRV8838         DRV8837
+    ----------------------------------------------
+    DIR                 =   Input 1     =   PH
+    PWM                 =   Input 2     =   EN
+
+    Logic:
+        nsleep  PH      EN      OUT1    OUT2    FUNCTION
+        0       X       X       Z       Z       Coast
+        1       X       0       L       L       Brake
+        1       1       1       L       H       Reverse
+        1       0       1       H       L       Forward
+
+        In the video, that based on how it is wired, it should be the same for
+        both motors - so forward is forward for the robot, irregardless of the
+        motor
+
+    I don't understand how this is going to work, from the DRV8837 datasheet it
+    looks as though we need VM connected to our batteries - VM is the motor
+    voltage.  WE have VCC connected, but all VCC is is the logic circuits.
+
+    Found the answer here from the driver board site:
+        By default, the drivers’ motor voltage (VM) is supplied by the board’s
+        switched battery voltage, VSW, and their logic voltage (VCCMD) is
+        supplied by the on-board regulator output, VREG (5 V by default). If
+        you want to customize these voltages, you can cut the jumpers labeled
+        VM = VSW and VCCMD = VREG and connect appropriate supplies to the VM
+        and VCCMD pins.
+
