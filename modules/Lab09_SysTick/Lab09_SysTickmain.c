@@ -50,12 +50,15 @@ policies, either expressed or implied, of the FreeBSD Project.
 // built-in blue LED connected to P2.2
 // RC circuit connected to P2.6, to create DAC
 #include <stdint.h>
+
 #include "msp.h"
-#include "..\inc\TExaS.h"
-#include "..\inc\Clock.h"
-#include "..\inc\CortexM.h"
-#include "..\inc\SysTick.h"
-#include "..\inc\LaunchPad.h"
+
+#include "../inc/TExaS.h"
+#include "../inc/Clock.h"
+#include "../inc/CortexM.h"
+#include "../inc/SysTick.h"
+#include "../inc/LaunchPad.h"
+
 uint32_t const DutyBuf[100]={
     240000, 255063, 270067, 284953, 299661, 314133, 328313, 342144, 355573, 368545,
     381010, 392918, 404223, 414880, 424846, 434083, 442554, 450226, 457068, 463053,
@@ -79,9 +82,20 @@ const uint32_t PulseBuf[100]={
      340,  254,  187,  139,  110,  100,  110,  139,  187,  254,
      340,  444,  566,  706,  863, 1036, 1224, 1428, 1646, 1877,
     2120, 2374, 2639, 2914, 3196, 3486, 3781, 4082, 4386, 4692};
+
+/*  Sleep for the specified amount of microseconds by continually sleeping for
+ *  1 microsecond, for 'delay' iterations
+ */
 void SysTick_Wait1us(uint32_t delay){
-    // write this code
-    
+    for(int ii = 0; ii < delay; ii++){
+        SysTick_Wait(CYCLES_PER_uS);
+    }
+}
+
+void SysTick_Wait1ms(uint32_t delay){
+    for(int ii = 0; ii < delay; ii++){
+        SysTick_Wait(CYCLES_PER_mS);
+    }
 }
 
 int Program9_1(void){
@@ -113,19 +127,47 @@ int Program9_2(void){uint32_t H,L;
   }
 }
 
+#define READ(port, pin) (P ## port->IN & (1 << pin))
+#define SET(port, pin) (P ## port->OUT |= (1 << pin))
+#define UNSET (port, pin) (P ## port->OUT &= ~(1 << pin))
+
+// if the frequency is to be 100 Hz, then the period will be 10ms
+#define PERIOD_ms 10
+
+//Turn the LED on for HIGH ms, then OFF for LOW ms
+#define BEAT(HIGH, LOW, PORT, PIN)          \
+    SET(PORT, PIN); SysTick_Wait1ms(HIGH);  \
+    UNSET(PORT, PIN); SysTick_Wait1ms(LOW)
+
+
 // Operation
 // The heartbeat starts when the operator pushes Button 1
 // The heartbeat stops when the operator pushes Button 2
 // When beating, the P1.0 LED oscillates at 100 Hz (too fast to see with the eye)
 //  and the duty cycle is varied sinuosoidally once a second
-int main(void){ 
+int main(void){
   Clock_Init48MHz(); // makes it 48 MHz
   TExaS_Init(LOGICANALYZER_P1);
   LaunchPad_Init();   // buttons and LEDs
   SysTick_Init();
+
+// negative logic built-in Button 1 connected to P1.1
+// negative logic built-in Button 2 connected to P1.4
+
+  unsigned char beating = 0;
   // write this code
   EnableInterrupts();
   while(1){
+    //If bitton 1 is pressed
+    if(READ(1, 1) == 0){
+        beating = 1;
+    }else if(READ(1, 4) == 0){
+        beating = 0;
+    }
+    if(beating){
+        BEAT_HEART(
+    }
+
       // write this code
   }
 }
