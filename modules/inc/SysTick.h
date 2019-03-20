@@ -81,6 +81,14 @@ void SysTick_Init(void);
  */
 void SysTick_Wait(uint32_t delay);
 
+// number of cycles to spin for 1 micro seconds and 1 mili second
+#ifndef CYCLES_PER_uS
+    #define CYCLES_PER_uS 48
+    #define CYCLES_PER_mS 48000
+#endif
+
+
+
 /**
  * Time delay using busy wait
  *

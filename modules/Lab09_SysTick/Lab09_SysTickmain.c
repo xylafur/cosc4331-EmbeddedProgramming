@@ -59,7 +59,9 @@ policies, either expressed or implied, of the FreeBSD Project.
 #include "../inc/SysTick.h"
 #include "../inc/LaunchPad.h"
 
-uint32_t const DutyBuf[100]={
+#define BUF_LEN 100
+
+const uint32_t DutyBuf[BUF_LEN] = {
     240000, 255063, 270067, 284953, 299661, 314133, 328313, 342144, 355573, 368545,
     381010, 392918, 404223, 414880, 424846, 434083, 442554, 450226, 457068, 463053,
     468158, 472363, 475651, 478008, 479427, 479900, 479427, 478008, 475651, 472363,
@@ -71,7 +73,7 @@ uint32_t const DutyBuf[100]={
     11842, 16947, 22932, 29774, 37446, 45917, 55154, 65120, 75777, 87082,
     98990, 111455, 124427, 137856, 151687, 165867, 180339, 195047, 209933, 224937
 };
-const uint32_t PulseBuf[100]={
+const uint32_t PulseBuf[BUF_LEN] = {
     5000, 5308, 5614, 5918, 6219, 6514, 6804, 7086, 7361, 7626,
     7880, 8123, 8354, 8572, 8776, 8964, 9137, 9294, 9434, 9556,
     9660, 9746, 9813, 9861, 9890, 9900, 9890, 9861, 9813, 9746,
@@ -82,6 +84,13 @@ const uint32_t PulseBuf[100]={
      340,  254,  187,  139,  110,  100,  110,  139,  187,  254,
      340,  444,  566,  706,  863, 1036, 1224, 1428, 1646, 1877,
     2120, 2374, 2639, 2914, 3196, 3486, 3781, 4082, 4386, 4692};
+
+
+//this is in units of micro seconds
+#define PERIOD 10000
+//helper macros to extract the relevant value from the array
+#define SIN_HIGH(t) PulseBuf[t % BUF_LEN]
+#define SIN_LOW(t) (PulseBuf[t % BUF_LEN] - PERIOD)
 
 /*  Sleep for the specified amount of microseconds by continually sleeping for
  *  1 microsecond, for 'delay' iterations
@@ -127,17 +136,18 @@ int Program9_2(void){uint32_t H,L;
   }
 }
 
-#define READ(port, pin) (P ## port->IN & (1 << pin))
-#define SET(port, pin) (P ## port->OUT |= (1 << pin))
-#define UNSET (port, pin) (P ## port->OUT &= ~(1 << pin))
+#define READ(PORT, pin) (P ## PORT->IN & (1 << pin))
+#define SET(PORT, pin) (P ## PORT->OUT |= (1 << pin))
+#define UNSET (PORT, pin) (P ## PORT->OUT &= ~(1 << pin))
 
-// if the frequency is to be 100 Hz, then the period will be 10ms
-#define PERIOD_ms 10
-
-//Turn the LED on for HIGH ms, then OFF for LOW ms
-#define BEAT(HIGH, LOW, PORT, PIN)          \
-    SET(PORT, PIN); SysTick_Wait1ms(HIGH);  \
-    UNSET(PORT, PIN); SysTick_Wait1ms(LOW)
+void beat(uint32_t high, uint32_t low){
+    //SET(port, pin);
+    P1->OUT |= (1 << 0);//toggle led on
+    SysTick_Wait1us(high);
+    //UNSET(port, pin);
+    P1->OUT &= ~(1 << 0);//toggle led off
+    SysTick_Wait1us(low);
+}
 
 
 // Operation
@@ -154,7 +164,9 @@ int main(void){
 // negative logic built-in Button 1 connected to P1.1
 // negative logic built-in Button 2 connected to P1.4
 
-  unsigned char beating = 0;
+  unsigned int beating = 0;
+  unsigned int t = 0;
+
   // write this code
   EnableInterrupts();
   while(1){
@@ -163,12 +175,13 @@ int main(void){
         beating = 1;
     }else if(READ(1, 4) == 0){
         beating = 0;
-    }
-    if(beating){
-        BEAT_HEART(
+        t = 0;
     }
 
-      // write this code
+    if(beating){
+        beat(SIN_HIGH(t), SIN_LOW(t));
+        t++;
+    }
   }
 }
 

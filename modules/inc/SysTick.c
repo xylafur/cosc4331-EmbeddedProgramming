@@ -60,10 +60,6 @@ void SysTick_Init(void){
   SysTick->CTRL = 0x00000005;           // enable SysTick with no interrupts
 }
 
-// number of cycles to spin for 1 micro seconds and 1 mili second
-#define CYCLES_PER_uS 48
-#define CYCLES_PER_mS 48000
-
 // Time delay using busy wait.
 // The delay parameter is in units of the core clock. 
 // assumes 48 MHz bus clock
