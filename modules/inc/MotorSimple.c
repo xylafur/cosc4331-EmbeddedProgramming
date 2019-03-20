@@ -61,14 +61,38 @@ policies, either expressed or implied, of the FreeBSD Project.
 #include "../inc/Bump.h"
 
 // *******Lab 12 solution*******
+//
+#define MAKE_OUTPUT(PORT, PIN)  \
+    PORT->SEL0 &= ~(1 << PIN);  \
+    PORT->SEL1 &= ~(1 << PIN);  \
+    PORT->DIR |= (1 << PIN)
+
+#define HIGH(PORT, PIN) (PORT->OUT |= (1 << PIN))
+#define LOW(PORT, PIN) (PORT->OUT &= ~(1 << PIN))
+
 
 void Motor_InitSimple(void){
-// Initializes the 6 GPIO lines and puts driver to sleep
-// Returns right away
-// initialize P1.6 and P1.7 and make them outputs
+  /*    The right motor is connected as follows:
+   *        DIR     1.6
+   *        PWM     2.6
+   *        !SLP    3.6
+   *    The left motor is connected as follows:
+   *        DIR     1.7
+   *        PWM     2.7
+   *        !SLP    3.7
+   *
+   *    All of these are GPIO outputs
+   */
+  #define NUM_MOTORS 2
+  uint8_t pins [NUM_MOTORS] = {6, 7};
 
-  // write this as part of Lab 12
+  uint8_t ii;
 
+  for(ii = 0 ; ii < NUM_MOTORS ; ii++){
+    MAKE_OUTPUT(P1, pins[ii]);
+    MAKE_OUTPUT(P2, pins[ii]);
+    MAKE_OUTPUT(P3, pins[ii]);
+  }
 }
 
 void Motor_StopSimple(void){
@@ -78,13 +102,39 @@ void Motor_StopSimple(void){
   P2->OUT &= ~0xC0;   // off
   P3->OUT &= ~0xC0;   // low current sleep mode
 }
-void Motor_ForwardSimple(uint16_t duty, uint32_t time){
-// Drives both motors forward at duty (100 to 9900)
-// Runs for time duration (units=10ms), and then stops
-// Stop the motors and return if any bumper switch is active
-// Returns after time*10ms or if a bumper switch is hit
 
-  // write this as part of Lab 12
+#define PERIOD_ms 10
+
+void PWM(uint16_t high_time_us, uint16_t period_ms){
+    uint16_t low_time_us = period_ms * 1000 - high_time_us;
+
+    //turn the motors on
+    HIGH(P2, 6);
+    HIGH(P2, 7);
+
+    SysTick_Wait1us(high_time_us);
+
+    //turn the motors off
+    LOW(P2, 6);
+    LOW(P2, 7);
+
+    SysTick_Wait1us(low_time_us);
+}
+
+/*  Duty is the time in microseconds that the wave should be high
+ *  Time is the time in 10ms that the pulse should happen
+ */
+void Motor_ForwardSimple(uint16_t duty, uint32_t time){
+    //Set the direction to forward (0) for each motor
+    LOW(P1, 6);
+    LOW(P1, 7);
+
+    uint32_t t;
+    for(t = 0; t < time ; t += PERIOD_ms){
+        PWM(duty, PERIOD_ms);
+        //TODO: Add in bumber stop logic
+        //
+    }
 }
 void Motor_BackwardSimple(uint16_t duty, uint32_t time){
 // Drives both motors backward at duty (100 to 9900)

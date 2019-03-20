@@ -54,17 +54,19 @@ policies, either expressed or implied, of the FreeBSD Project.
 // Right motor PWM connected to P2.6/TA0CCP3 (J4.39)
 // Right motor enable connected to P3.6 (J2.11)
 
+
 #include "msp.h"
-#include "..\inc\bump.h"
-#include "..\inc\Clock.h"
-#include "..\inc\SysTick.h"
-#include "..\inc\LaunchPad.h"
-#include "..\inc\MotorSimple.h"
+#include "../inc/Bump.h"
+#include "../inc/Clock.h"
+#include "../inc/SysTick.h"
+#include "../inc/LaunchPad.h"
+#include "../inc/MotorSimple.h"
 
 // Driver test
 void Pause(void){
   while(LaunchPad_Input()==0);  // wait for touch
   while(LaunchPad_Input());     // wait for release
+
 }
 int Program12_1(void){
   Clock_Init48MHz();
@@ -110,8 +112,15 @@ int Program12_3(void){
   }
 }
 
+void Test(){
+    //Just test that wheels actually spin
+    Motor_ForwardSimple(5000, 1000); 
+}
+
+
 // does the robot move straight?
-int main(void){ // Program12_4
+//int main(void){ // Program12_4
+int notmain(void){
   Clock_Init48MHz();
   LaunchPad_Init();   // built-in switches and LEDs
   Bump_Init();        // bump switches

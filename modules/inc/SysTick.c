@@ -53,6 +53,8 @@ policies, either expressed or implied, of the FreeBSD Project.
 #include <stdint.h>
 #include "msp.h"
 
+#include "SysTick.h"
+
 
 // Initialize SysTick with busy wait running at bus clock.
 void SysTick_Init(void){
@@ -82,11 +84,20 @@ void SysTick_Wait(uint32_t delay){
   }
   while(elapsedTime <= delay);*/
 }
+
+
+void SysTick_Wait1us(uint32_t delay){
+    uint32_t ii;
+    for(ii = 0; ii < delay; ii++){
+        SysTick_Wait(CYCLES_PER_uS);
+    }
+}
+
 // Time delay using busy wait.
 // assumes 48 MHz bus clock
 void SysTick_Wait10ms(uint32_t delay){
   uint32_t i;
   for(i=0; i<delay; i++){
-    SysTick_Wait(480000);  // wait 10ms (assumes 48 MHz clock)
+    SysTick_Wait(CYCLES_PER_10_mS);  // wait 10ms (assumes 48 MHz clock)
   }
 }

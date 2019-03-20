@@ -85,6 +85,7 @@ void SysTick_Wait(uint32_t delay);
 #ifndef CYCLES_PER_uS
     #define CYCLES_PER_uS 48
     #define CYCLES_PER_mS 48000
+    #define CYCLES_PER_10_mS 480000
 #endif
 
 
@@ -99,3 +100,5 @@ void SysTick_Wait(uint32_t delay);
  * @brief   Time delay using SysTick
  */
 void SysTick_Wait10ms(uint32_t delay);
+
+void SysTick_Wait1us(uint32_t delay);
