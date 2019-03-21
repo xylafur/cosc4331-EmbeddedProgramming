@@ -91,6 +91,7 @@ void Motor_InitSimple(void);
  */
 void Motor_StopSimple(void);
 
+void Motor_ForwardExtraSimple();
 
 /**
  * Drives both motors forward at duty (100 to 9900).
@@ -149,5 +150,8 @@ void Motor_LeftSimple(uint16_t duty, uint32_t time);
  */
 void Motor_RightSimple(uint16_t duty, uint32_t time);
 
+
+void MoveForwardBack();
+void MoveSquare();
 
 #endif /* MOTORSIMPLE_H_ */

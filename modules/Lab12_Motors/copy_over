@@ -1,0 +1,5 @@
+cp ../inc/SysTick.h /home/yelsek/projects/tirslk_maze_1_00_01/tirslk_maze_1_00_00/inc/SysTick.h
+cp ../inc/SysTick.c /home/yelsek/projects/tirslk_maze_1_00_01/tirslk_maze_1_00_00/inc/SysTick.c
+cp Lab12_Motorsmain.c /home/yelsek/projects/tirslk_maze_1_00_01/tirslk_maze_1_00_00/Lab12_Motors/Lab12_Motorsmain.c
+cp ../inc/MotorSimple.c /home/yelsek/projects/tirslk_maze_1_00_01/tirslk_maze_1_00_00/inc/MotorSimple.c
+cp ../inc/MotorSimple.h /home/yelsek/projects/tirslk_maze_1_00_01/tirslk_maze_1_00_00/inc/MotorSimple.h

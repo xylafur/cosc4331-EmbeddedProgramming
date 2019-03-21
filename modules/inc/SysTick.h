@@ -84,6 +84,7 @@ void SysTick_Wait(uint32_t delay);
 // number of cycles to spin for 1 micro seconds and 1 mili second
 #ifndef CYCLES_PER_uS
     #define CYCLES_PER_uS 48
+    #define CYCLES_PER_10_uS 480
     #define CYCLES_PER_mS 48000
     #define CYCLES_PER_10_mS 480000
 #endif
@@ -101,4 +102,5 @@ void SysTick_Wait(uint32_t delay);
  */
 void SysTick_Wait10ms(uint32_t delay);
 
+void SysTick_Wait10us(uint32_t delay);
 void SysTick_Wait1us(uint32_t delay);

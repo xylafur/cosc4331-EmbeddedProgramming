@@ -85,6 +85,12 @@ void SysTick_Wait(uint32_t delay){
   while(elapsedTime <= delay);*/
 }
 
+void SysTick_Wait10us(uint32_t delay){
+    uint32_t ii;
+    for(ii = 0; ii < delay; ii++){
+        SysTick_Wait(CYCLES_PER_10_uS);
+    }
+}
 
 void SysTick_Wait1us(uint32_t delay){
     uint32_t ii;

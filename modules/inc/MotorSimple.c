@@ -93,6 +93,12 @@ void Motor_InitSimple(void){
     MAKE_OUTPUT(P2, pins[ii]);
     MAKE_OUTPUT(P3, pins[ii]);
   }
+
+  LOW(P2, 6);
+  LOW(P2, 7);
+
+  HIGH(P3, 6);
+  HIGH(P3, 7);
 }
 
 void Motor_StopSimple(void){
@@ -103,22 +109,57 @@ void Motor_StopSimple(void){
   P3->OUT &= ~0xC0;   // low current sleep mode
 }
 
+/*  I have these just because it makes everything seem less like magic
+ */
+#define RIGHT_WHEEL_FORWARD() LOW(P1, 6)
+#define RIGHT_WHEEL_BACKWARD() HIGH(P1, 6)
+#define RIGHT_WHEEL_ON() HIGH(P2, 6)
+#define RIGHT_WHEEL_OFF() LOW(P2, 6)
+
+#define LEFT_WHEEL_FORWARD() HIGH(P1, 7)
+#define LEFT_WHEEL_BACKWARD() LOW(P1, 7)
+#define LEFT_WHEEL_ON() HIGH(P2, 7)
+#define LEFT_WHEEL_OFF() LOW(P2, 7)
+
+
 #define PERIOD_ms 10
 
 void PWM(uint16_t high_time_us, uint16_t period_ms){
     uint16_t low_time_us = period_ms * 1000 - high_time_us;
 
-    //turn the motors on
-    HIGH(P2, 6);
-    HIGH(P2, 7);
+    RIGHT_WHEEL_ON();
+    LEFT_WHEEL_ON();
 
     SysTick_Wait1us(high_time_us);
 
-    //turn the motors off
-    LOW(P2, 6);
-    LOW(P2, 7);
+    RIGHT_WHEEL_OFF();
+    LEFT_WHEEL_OFF();
 
     SysTick_Wait1us(low_time_us);
+}
+
+void spin(uint16_t duty, uint32_t time, uint16_t period){
+    uint32_t t;
+    for(t = 0; t < time ; t += PERIOD_ms){
+        PWM(duty, period);
+        //TODO: Add in bumber stop logic
+        //
+    }
+}
+
+
+void Motor_ForwardExtraSimple(){
+    RIGHT_WHEEL_FORWARD();
+    LEFT_WHEEL_FORWARD();
+
+    RIGHT_WHEEL_ON();
+    LEFT_WHEEL_ON();
+
+
+    SysTick_Wait10us(10000);
+
+    RIGHT_WHEEL_OFF();
+    LEFT_WHEEL_OFF();
 }
 
 /*  Duty is the time in microseconds that the wave should be high
@@ -126,39 +167,56 @@ void PWM(uint16_t high_time_us, uint16_t period_ms){
  */
 void Motor_ForwardSimple(uint16_t duty, uint32_t time){
     //Set the direction to forward (0) for each motor
-    LOW(P1, 6);
-    LOW(P1, 7);
+    RIGHT_WHEEL_FORWARD();
+    LEFT_WHEEL_FORWARD();
 
-    uint32_t t;
-    for(t = 0; t < time ; t += PERIOD_ms){
-        PWM(duty, PERIOD_ms);
-        //TODO: Add in bumber stop logic
-        //
-    }
+    spin(duty, time, PERIOD_ms);
 }
+
 void Motor_BackwardSimple(uint16_t duty, uint32_t time){
-// Drives both motors backward at duty (100 to 9900)
-// Runs for time duration (units=10ms), and then stops
-// Runs even if any bumper switch is active
-// Returns after time*10ms
+    RIGHT_WHEEL_BACKWARD();
+    LEFT_WHEEL_BACKWARD();
 
-  // write this as part of Lab 12
+    spin(duty, time, PERIOD_ms);
 }
+
+// He says to have rigth wheel sleep, but I just had it spin backwards!
 void Motor_LeftSimple(uint16_t duty, uint32_t time){
-// Drives just the left motor forward at duty (100 to 9900)
-// Right motor is stopped (sleeping)
-// Runs for time duration (units=10ms), and then stops
-// Stop the motor and return if any bumper switch is active
-// Returns after time*10ms or if a bumper switch is hit
+    RIGHT_WHEEL_BACKWARD();
+    LEFT_WHEEL_FORWARD();
 
-  // write this as part of Lab 12
+    spin(duty, time, PERIOD_ms);
 }
-void Motor_RightSimple(uint16_t duty, uint32_t time){
-// Drives just the right motor forward at duty (100 to 9900)
-// Left motor is stopped (sleeping)
-// Runs for time duration (units=10ms), and then stops
-// Stop the motor and return if any bumper switch is active
-// Returns after time*10ms or if a bumper switch is hit
 
-  // write this as part of Lab 12
+void Motor_RightSimple(uint16_t duty, uint32_t time){
+    RIGHT_WHEEL_FORWARD();
+    LEFT_WHEEL_BACKWARD();
+
+    spin(duty, time, PERIOD_ms);
+}
+
+
+
+void MoveForwardBack(){
+    Motor_ForwardSimple(5000, 1000);
+
+    SysTick_Wait10ms(100);
+
+    Motor_BackwardSimple(5000, 1000);
+}
+
+void MoveSquare(){
+    Motor_ForwardSimple(5000, 500);
+    SysTick_Wait10ms(100);
+
+    Motor_LeftSimple(5000, 110);
+    SysTick_Wait10ms(100);
+
+    Motor_ForwardSimple(5000, 500);
+    SysTick_Wait10ms(100);
+
+    Motor_LeftSimple(5000, 110);
+    SysTick_Wait10ms(100);
+
+    Motor_ForwardSimple(5000, 500);
 }

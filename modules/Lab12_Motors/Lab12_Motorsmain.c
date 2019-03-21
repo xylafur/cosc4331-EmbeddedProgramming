@@ -112,9 +112,19 @@ int Program12_3(void){
   }
 }
 
-void Test(){
+void main(){
     //Just test that wheels actually spin
-    Motor_ForwardSimple(5000, 1000); 
+    Clock_Init48MHz(); // makes it 48 MHz
+    SysTick_Init();
+    Motor_InitSimple(); // initialization
+    LaunchPad_Init();   // buttons and LEDs
+
+    MoveForwardBack();
+
+    SysTick_Wait10ms(200);
+
+    MoveSquare();
+
 }
 
 
@@ -143,5 +153,3 @@ int notmain(void){
     }
   }
 }
-
-
