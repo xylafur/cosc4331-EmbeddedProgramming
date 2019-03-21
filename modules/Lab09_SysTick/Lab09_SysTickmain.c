@@ -90,16 +90,8 @@ const uint32_t PulseBuf[BUF_LEN] = {
 #define PERIOD 10000
 //helper macros to extract the relevant value from the array
 #define SIN_HIGH(t) PulseBuf[t % BUF_LEN]
-#define SIN_LOW(t) (PulseBuf[t % BUF_LEN] - PERIOD)
+#define SIN_LOW(t) (PERIOD - PulseBuf[t % BUF_LEN])
 
-/*  Sleep for the specified amount of microseconds by continually sleeping for
- *  1 microsecond, for 'delay' iterations
- */
-void SysTick_Wait1us(uint32_t delay){
-    for(int ii = 0; ii < delay; ii++){
-        SysTick_Wait(CYCLES_PER_uS);
-    }
-}
 
 void SysTick_Wait1ms(uint32_t delay){
     for(int ii = 0; ii < delay; ii++){
@@ -137,15 +129,14 @@ int Program9_2(void){uint32_t H,L;
 }
 
 #define READ(PORT, pin) (P ## PORT->IN & (1 << pin))
-#define SET(PORT, pin) (P ## PORT->OUT |= (1 << pin))
-#define UNSET (PORT, pin) (P ## PORT->OUT &= ~(1 << pin))
+
+#define HIGH(PORT, PIN) (PORT->OUT |= (1 << PIN))
+#define LOW(PORT, PIN) (PORT->OUT &= ~(1 << PIN))
 
 void beat(uint32_t high, uint32_t low){
-    //SET(port, pin);
-    P1->OUT |= (1 << 0);//toggle led on
+    HIGH(P1, 0);
     SysTick_Wait1us(high);
-    //UNSET(port, pin);
-    P1->OUT &= ~(1 << 0);//toggle led off
+    LOW(P1, 0);
     SysTick_Wait1us(low);
 }
 
@@ -179,6 +170,7 @@ int main(void){
     }
 
     if(beating){
+        //beat(1000, 1000);
         beat(SIN_HIGH(t), SIN_LOW(t));
         t++;
     }

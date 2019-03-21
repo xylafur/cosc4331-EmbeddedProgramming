@@ -1,3 +1,10 @@
 .*.un*
 .*.sw*
 *.core
+*.obj
+*.out
+*.raw
+*.pp
+*.d_raw
+*.xml
+*.map

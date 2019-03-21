@@ -1,0 +1,3 @@
+cp ../inc/SysTick.h /home/yelsek/projects/tirslk_maze_1_00_01/tirslk_maze_1_00_00/inc/SysTick.h
+cp ../inc/SysTick.c /home/yelsek/projects/tirslk_maze_1_00_01/tirslk_maze_1_00_00/inc/SysTick.c
+cp Lab09_SysTickmain.c /home/yelsek/projects/tirslk_maze_1_00_01/tirslk_maze_1_00_00/Lab09_SysTick/Lab09_SysTickmain.c
