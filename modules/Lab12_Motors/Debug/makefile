@@ -156,6 +156,9 @@ Lab12_Motors.hex: $(EXE_OUTPUTS)
 	@echo 'Finished building: $(strip $(EXE_OUTPUTS__QUOTED))'
 	@echo ' '
 
+flash: Lab12_Motors.out
+	/opt/ccstudio/ccsv8/ccs_base/DebugServer/bin/DSLite load --config=../targetConfigs/MSP432P401R.ccxml Lab12_Motors.out
+
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
