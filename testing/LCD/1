@@ -1,0 +1,552 @@
+LCD_Test.c: In function ‘LCD_Init’:
+LCD_Test.c:82:42: error: expected expression before ‘->’ token
+ #define MK_GPIO(PORT, PIN, _DIR)    PORT -> SEL0 &= ~(1 << PIN);            \
+                                          ^~
+LCD_Test.c:92:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(RS_Port, RS_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:83:42: error: expected expression before ‘->’ token
+                                     PORT -> SEL1 &= ~(1 << PIN);            \
+                                          ^~
+LCD_Test.c:92:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(RS_Port, RS_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:84:54: error: expected expression before ‘->’ token
+                                     if(_DIR){   PORT -> DIR |= (1 << PIN);} \
+                                                      ^~
+LCD_Test.c:92:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(RS_Port, RS_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:85:54: error: expected expression before ‘->’ token
+                                     else{       PORT -> DIR &= ~(1 << PIN);}
+                                                      ^~
+LCD_Test.c:92:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(RS_Port, RS_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:82:42: error: expected expression before ‘->’ token
+ #define MK_GPIO(PORT, PIN, _DIR)    PORT -> SEL0 &= ~(1 << PIN);            \
+                                          ^~
+LCD_Test.c:93:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(RW_Port, RW_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:83:42: error: expected expression before ‘->’ token
+                                     PORT -> SEL1 &= ~(1 << PIN);            \
+                                          ^~
+LCD_Test.c:93:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(RW_Port, RW_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:84:54: error: expected expression before ‘->’ token
+                                     if(_DIR){   PORT -> DIR |= (1 << PIN);} \
+                                                      ^~
+LCD_Test.c:93:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(RW_Port, RW_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:85:54: error: expected expression before ‘->’ token
+                                     else{       PORT -> DIR &= ~(1 << PIN);}
+                                                      ^~
+LCD_Test.c:93:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(RW_Port, RW_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:82:42: error: expected expression before ‘->’ token
+ #define MK_GPIO(PORT, PIN, _DIR)    PORT -> SEL0 &= ~(1 << PIN);            \
+                                          ^~
+LCD_Test.c:94:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(E_Port, E_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:83:42: error: expected expression before ‘->’ token
+                                     PORT -> SEL1 &= ~(1 << PIN);            \
+                                          ^~
+LCD_Test.c:94:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(E_Port, E_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:84:54: error: expected expression before ‘->’ token
+                                     if(_DIR){   PORT -> DIR |= (1 << PIN);} \
+                                                      ^~
+LCD_Test.c:94:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(E_Port, E_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:85:54: error: expected expression before ‘->’ token
+                                     else{       PORT -> DIR &= ~(1 << PIN);}
+                                                      ^~
+LCD_Test.c:94:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(E_Port, E_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:82:42: error: expected expression before ‘->’ token
+ #define MK_GPIO(PORT, PIN, _DIR)    PORT -> SEL0 &= ~(1 << PIN);            \
+                                          ^~
+LCD_Test.c:96:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D0_Port, D0_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:83:42: error: expected expression before ‘->’ token
+                                     PORT -> SEL1 &= ~(1 << PIN);            \
+                                          ^~
+LCD_Test.c:96:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D0_Port, D0_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:84:54: error: expected expression before ‘->’ token
+                                     if(_DIR){   PORT -> DIR |= (1 << PIN);} \
+                                                      ^~
+LCD_Test.c:96:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D0_Port, D0_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:85:54: error: expected expression before ‘->’ token
+                                     else{       PORT -> DIR &= ~(1 << PIN);}
+                                                      ^~
+LCD_Test.c:96:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D0_Port, D0_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:82:42: error: expected expression before ‘->’ token
+ #define MK_GPIO(PORT, PIN, _DIR)    PORT -> SEL0 &= ~(1 << PIN);            \
+                                          ^~
+LCD_Test.c:97:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D1_Port, D1_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:83:42: error: expected expression before ‘->’ token
+                                     PORT -> SEL1 &= ~(1 << PIN);            \
+                                          ^~
+LCD_Test.c:97:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D1_Port, D1_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:84:54: error: expected expression before ‘->’ token
+                                     if(_DIR){   PORT -> DIR |= (1 << PIN);} \
+                                                      ^~
+LCD_Test.c:97:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D1_Port, D1_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:85:54: error: expected expression before ‘->’ token
+                                     else{       PORT -> DIR &= ~(1 << PIN);}
+                                                      ^~
+LCD_Test.c:97:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D1_Port, D1_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:82:42: error: expected expression before ‘->’ token
+ #define MK_GPIO(PORT, PIN, _DIR)    PORT -> SEL0 &= ~(1 << PIN);            \
+                                          ^~
+LCD_Test.c:98:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D2_Port, D2_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:83:42: error: expected expression before ‘->’ token
+                                     PORT -> SEL1 &= ~(1 << PIN);            \
+                                          ^~
+LCD_Test.c:98:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D2_Port, D2_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:84:54: error: expected expression before ‘->’ token
+                                     if(_DIR){   PORT -> DIR |= (1 << PIN);} \
+                                                      ^~
+LCD_Test.c:98:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D2_Port, D2_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:85:54: error: expected expression before ‘->’ token
+                                     else{       PORT -> DIR &= ~(1 << PIN);}
+                                                      ^~
+LCD_Test.c:98:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D2_Port, D2_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:82:42: error: expected expression before ‘->’ token
+ #define MK_GPIO(PORT, PIN, _DIR)    PORT -> SEL0 &= ~(1 << PIN);            \
+                                          ^~
+LCD_Test.c:99:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D3_Port, D3_Pin, OUTPUT):
+     ^~~~~~~
+LCD_Test.c:83:42: error: expected expression before ‘->’ token
+                                     PORT -> SEL1 &= ~(1 << PIN);            \
+                                          ^~
+LCD_Test.c:99:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D3_Port, D3_Pin, OUTPUT):
+     ^~~~~~~
+LCD_Test.c:84:54: error: expected expression before ‘->’ token
+                                     if(_DIR){   PORT -> DIR |= (1 << PIN);} \
+                                                      ^~
+LCD_Test.c:99:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D3_Port, D3_Pin, OUTPUT):
+     ^~~~~~~
+LCD_Test.c:85:54: error: expected expression before ‘->’ token
+                                     else{       PORT -> DIR &= ~(1 << PIN);}
+                                                      ^~
+LCD_Test.c:99:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D3_Port, D3_Pin, OUTPUT):
+     ^~~~~~~
+LCD_Test.c:99:37: error: expected expression before ‘:’ token
+     MK_GPIO(D3_Port, D3_Pin, OUTPUT):
+                                     ^
+LCD_Test.c:83:42: error: expected expression before ‘->’ token
+                                     PORT -> SEL1 &= ~(1 << PIN);            \
+                                          ^~
+LCD_Test.c:100:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D4_Port, D4_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:84:54: error: expected expression before ‘->’ token
+                                     if(_DIR){   PORT -> DIR |= (1 << PIN);} \
+                                                      ^~
+LCD_Test.c:100:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D4_Port, D4_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:85:54: error: expected expression before ‘->’ token
+                                     else{       PORT -> DIR &= ~(1 << PIN);}
+                                                      ^~
+LCD_Test.c:100:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D4_Port, D4_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:82:42: error: expected expression before ‘->’ token
+ #define MK_GPIO(PORT, PIN, _DIR)    PORT -> SEL0 &= ~(1 << PIN);            \
+                                          ^~
+LCD_Test.c:101:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D5_Port, D5_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:83:42: error: expected expression before ‘->’ token
+                                     PORT -> SEL1 &= ~(1 << PIN);            \
+                                          ^~
+LCD_Test.c:101:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D5_Port, D5_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:84:54: error: expected expression before ‘->’ token
+                                     if(_DIR){   PORT -> DIR |= (1 << PIN);} \
+                                                      ^~
+LCD_Test.c:101:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D5_Port, D5_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:85:54: error: expected expression before ‘->’ token
+                                     else{       PORT -> DIR &= ~(1 << PIN);}
+                                                      ^~
+LCD_Test.c:101:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D5_Port, D5_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:82:42: error: expected expression before ‘->’ token
+ #define MK_GPIO(PORT, PIN, _DIR)    PORT -> SEL0 &= ~(1 << PIN);            \
+                                          ^~
+LCD_Test.c:102:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D6_Port, D6_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:83:42: error: expected expression before ‘->’ token
+                                     PORT -> SEL1 &= ~(1 << PIN);            \
+                                          ^~
+LCD_Test.c:102:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D6_Port, D6_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:84:54: error: expected expression before ‘->’ token
+                                     if(_DIR){   PORT -> DIR |= (1 << PIN);} \
+                                                      ^~
+LCD_Test.c:102:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D6_Port, D6_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:85:54: error: expected expression before ‘->’ token
+                                     else{       PORT -> DIR &= ~(1 << PIN);}
+                                                      ^~
+LCD_Test.c:102:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D6_Port, D6_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:82:42: error: expected expression before ‘->’ token
+ #define MK_GPIO(PORT, PIN, _DIR)    PORT -> SEL0 &= ~(1 << PIN);            \
+                                          ^~
+LCD_Test.c:103:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D7_Port, D7_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:83:42: error: expected expression before ‘->’ token
+                                     PORT -> SEL1 &= ~(1 << PIN);            \
+                                          ^~
+LCD_Test.c:103:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D7_Port, D7_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:84:54: error: expected expression before ‘->’ token
+                                     if(_DIR){   PORT -> DIR |= (1 << PIN);} \
+                                                      ^~
+LCD_Test.c:103:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D7_Port, D7_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:85:54: error: expected expression before ‘->’ token
+                                     else{       PORT -> DIR &= ~(1 << PIN);}
+                                                      ^~
+LCD_Test.c:103:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(D7_Port, D7_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:82:42: error: expected expression before ‘->’ token
+ #define MK_GPIO(PORT, PIN, _DIR)    PORT -> SEL0 &= ~(1 << PIN);            \
+                                          ^~
+LCD_Test.c:105:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(A_Port, A_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:83:42: error: expected expression before ‘->’ token
+                                     PORT -> SEL1 &= ~(1 << PIN);            \
+                                          ^~
+LCD_Test.c:105:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(A_Port, A_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:84:54: error: expected expression before ‘->’ token
+                                     if(_DIR){   PORT -> DIR |= (1 << PIN);} \
+                                                      ^~
+LCD_Test.c:105:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(A_Port, A_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:85:54: error: expected expression before ‘->’ token
+                                     else{       PORT -> DIR &= ~(1 << PIN);}
+                                                      ^~
+LCD_Test.c:105:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(A_Port, A_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:82:42: error: expected expression before ‘->’ token
+ #define MK_GPIO(PORT, PIN, _DIR)    PORT -> SEL0 &= ~(1 << PIN);            \
+                                          ^~
+LCD_Test.c:106:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(K_Port, K_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:83:42: error: expected expression before ‘->’ token
+                                     PORT -> SEL1 &= ~(1 << PIN);            \
+                                          ^~
+LCD_Test.c:106:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(K_Port, K_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:84:54: error: expected expression before ‘->’ token
+                                     if(_DIR){   PORT -> DIR |= (1 << PIN);} \
+                                                      ^~
+LCD_Test.c:106:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(K_Port, K_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c:85:54: error: expected expression before ‘->’ token
+                                     else{       PORT -> DIR &= ~(1 << PIN);}
+                                                      ^~
+LCD_Test.c:106:5: note: in expansion of macro ‘MK_GPIO’
+     MK_GPIO(K_Port, K_Pin, OUTPUT);
+     ^~~~~~~
+LCD_Test.c: In function ‘Clear_Display’:
+LCD_Test.c:77:23: error: expected expression before ‘->’ token
+     if(DATA){   (PORT -> OUT |= (1 << PIN));  }     \
+                       ^~
+LCD_Test.c:110:5: note: in expansion of macro ‘WRITE’
+     WRITE(RS_Port, RS_Pin, 0);
+     ^~~~~
+LCD_Test.c:78:23: error: expected expression before ‘->’ token
+     else{       (PORT -> OUT &= ~(1 << PIN)); }
+                       ^~
+LCD_Test.c:110:5: note: in expansion of macro ‘WRITE’
+     WRITE(RS_Port, RS_Pin, 0);
+     ^~~~~
+LCD_Test.c:77:23: error: expected expression before ‘->’ token
+     if(DATA){   (PORT -> OUT |= (1 << PIN));  }     \
+                       ^~
+LCD_Test.c:111:5: note: in expansion of macro ‘WRITE’
+     WRITE(RW_Port, RW_Pin, 0);
+     ^~~~~
+LCD_Test.c:78:23: error: expected expression before ‘->’ token
+     else{       (PORT -> OUT &= ~(1 << PIN)); }
+                       ^~
+LCD_Test.c:111:5: note: in expansion of macro ‘WRITE’
+     WRITE(RW_Port, RW_Pin, 0);
+     ^~~~~
+LCD_Test.c:77:23: error: expected expression before ‘->’ token
+     if(DATA){   (PORT -> OUT |= (1 << PIN));  }     \
+                       ^~
+LCD_Test.c:113:5: note: in expansion of macro ‘WRITE’
+     WRITE(D0_Port, D0_Port, 1);
+     ^~~~~
+LCD_Test.c:78:23: error: expected expression before ‘->’ token
+     else{       (PORT -> OUT &= ~(1 << PIN)); }
+                       ^~
+LCD_Test.c:113:5: note: in expansion of macro ‘WRITE’
+     WRITE(D0_Port, D0_Port, 1);
+     ^~~~~
+LCD_Test.c:77:23: error: expected expression before ‘->’ token
+     if(DATA){   (PORT -> OUT |= (1 << PIN));  }     \
+                       ^~
+LCD_Test.c:114:5: note: in expansion of macro ‘WRITE’
+     WRITE(D1_Port, D1_Port, 0);
+     ^~~~~
+LCD_Test.c:78:23: error: expected expression before ‘->’ token
+     else{       (PORT -> OUT &= ~(1 << PIN)); }
+                       ^~
+LCD_Test.c:114:5: note: in expansion of macro ‘WRITE’
+     WRITE(D1_Port, D1_Port, 0);
+     ^~~~~
+LCD_Test.c:77:23: error: expected expression before ‘->’ token
+     if(DATA){   (PORT -> OUT |= (1 << PIN));  }     \
+                       ^~
+LCD_Test.c:115:5: note: in expansion of macro ‘WRITE’
+     WRITE(D2_Port, D2_Port, 0);
+     ^~~~~
+LCD_Test.c:78:23: error: expected expression before ‘->’ token
+     else{       (PORT -> OUT &= ~(1 << PIN)); }
+                       ^~
+LCD_Test.c:115:5: note: in expansion of macro ‘WRITE’
+     WRITE(D2_Port, D2_Port, 0);
+     ^~~~~
+LCD_Test.c:77:23: error: expected expression before ‘->’ token
+     if(DATA){   (PORT -> OUT |= (1 << PIN));  }     \
+                       ^~
+LCD_Test.c:116:5: note: in expansion of macro ‘WRITE’
+     WRITE(D3_Port, D3_Port, 0);
+     ^~~~~
+LCD_Test.c:78:23: error: expected expression before ‘->’ token
+     else{       (PORT -> OUT &= ~(1 << PIN)); }
+                       ^~
+LCD_Test.c:116:5: note: in expansion of macro ‘WRITE’
+     WRITE(D3_Port, D3_Port, 0);
+     ^~~~~
+LCD_Test.c:77:23: error: expected expression before ‘->’ token
+     if(DATA){   (PORT -> OUT |= (1 << PIN));  }     \
+                       ^~
+LCD_Test.c:117:5: note: in expansion of macro ‘WRITE’
+     WRITE(D4_Port, D4_Port, 0);
+     ^~~~~
+LCD_Test.c:78:23: error: expected expression before ‘->’ token
+     else{       (PORT -> OUT &= ~(1 << PIN)); }
+                       ^~
+LCD_Test.c:117:5: note: in expansion of macro ‘WRITE’
+     WRITE(D4_Port, D4_Port, 0);
+     ^~~~~
+LCD_Test.c:77:23: error: expected expression before ‘->’ token
+     if(DATA){   (PORT -> OUT |= (1 << PIN));  }     \
+                       ^~
+LCD_Test.c:118:5: note: in expansion of macro ‘WRITE’
+     WRITE(D5_Port, D5_Port, 0);
+     ^~~~~
+LCD_Test.c:78:23: error: expected expression before ‘->’ token
+     else{       (PORT -> OUT &= ~(1 << PIN)); }
+                       ^~
+LCD_Test.c:118:5: note: in expansion of macro ‘WRITE’
+     WRITE(D5_Port, D5_Port, 0);
+     ^~~~~
+LCD_Test.c:77:23: error: expected expression before ‘->’ token
+     if(DATA){   (PORT -> OUT |= (1 << PIN));  }     \
+                       ^~
+LCD_Test.c:119:5: note: in expansion of macro ‘WRITE’
+     WRITE(D6_Port, D6_Port, 0);
+     ^~~~~
+LCD_Test.c:78:23: error: expected expression before ‘->’ token
+     else{       (PORT -> OUT &= ~(1 << PIN)); }
+                       ^~
+LCD_Test.c:119:5: note: in expansion of macro ‘WRITE’
+     WRITE(D6_Port, D6_Port, 0);
+     ^~~~~
+LCD_Test.c:77:23: error: expected expression before ‘->’ token
+     if(DATA){   (PORT -> OUT |= (1 << PIN));  }     \
+                       ^~
+LCD_Test.c:120:5: note: in expansion of macro ‘WRITE’
+     WRITE(D7_Port, D7_Port, 0);
+     ^~~~~
+LCD_Test.c:78:23: error: expected expression before ‘->’ token
+     else{       (PORT -> OUT &= ~(1 << PIN)); }
+                       ^~
+LCD_Test.c:120:5: note: in expansion of macro ‘WRITE’
+     WRITE(D7_Port, D7_Port, 0);
+     ^~~~~
+LCD_Test.c: In function ‘Set_Display’:
+LCD_Test.c:77:23: error: expected expression before ‘->’ token
+     if(DATA){   (PORT -> OUT |= (1 << PIN));  }     \
+                       ^~
+LCD_Test.c:125:5: note: in expansion of macro ‘WRITE’
+     WRITE(RS_Port, RS_Pin, 0);
+     ^~~~~
+LCD_Test.c:78:23: error: expected expression before ‘->’ token
+     else{       (PORT -> OUT &= ~(1 << PIN)); }
+                       ^~
+LCD_Test.c:125:5: note: in expansion of macro ‘WRITE’
+     WRITE(RS_Port, RS_Pin, 0);
+     ^~~~~
+LCD_Test.c:77:23: error: expected expression before ‘->’ token
+     if(DATA){   (PORT -> OUT |= (1 << PIN));  }     \
+                       ^~
+LCD_Test.c:126:5: note: in expansion of macro ‘WRITE’
+     WRITE(RW_Port, RW_Pin, 0);
+     ^~~~~
+LCD_Test.c:78:23: error: expected expression before ‘->’ token
+     else{       (PORT -> OUT &= ~(1 << PIN)); }
+                       ^~
+LCD_Test.c:126:5: note: in expansion of macro ‘WRITE’
+     WRITE(RW_Port, RW_Pin, 0);
+     ^~~~~
+LCD_Test.c:77:23: error: expected expression before ‘->’ token
+     if(DATA){   (PORT -> OUT |= (1 << PIN));  }     \
+                       ^~
+LCD_Test.c:128:5: note: in expansion of macro ‘WRITE’
+     WRITE(D0_Port, D0_Port, cursor_blink);
+     ^~~~~
+LCD_Test.c:78:23: error: expected expression before ‘->’ token
+     else{       (PORT -> OUT &= ~(1 << PIN)); }
+                       ^~
+LCD_Test.c:128:5: note: in expansion of macro ‘WRITE’
+     WRITE(D0_Port, D0_Port, cursor_blink);
+     ^~~~~
+LCD_Test.c:77:23: error: expected expression before ‘->’ token
+     if(DATA){   (PORT -> OUT |= (1 << PIN));  }     \
+                       ^~
+LCD_Test.c:129:5: note: in expansion of macro ‘WRITE’
+     WRITE(D1_Port, D1_Port, cursor);
+     ^~~~~
+LCD_Test.c:78:23: error: expected expression before ‘->’ token
+     else{       (PORT -> OUT &= ~(1 << PIN)); }
+                       ^~
+LCD_Test.c:129:5: note: in expansion of macro ‘WRITE’
+     WRITE(D1_Port, D1_Port, cursor);
+     ^~~~~
+LCD_Test.c:77:23: error: expected expression before ‘->’ token
+     if(DATA){   (PORT -> OUT |= (1 << PIN));  }     \
+                       ^~
+LCD_Test.c:130:5: note: in expansion of macro ‘WRITE’
+     WRITE(D2_Port, D2_Port, display);
+     ^~~~~
+LCD_Test.c:78:23: error: expected expression before ‘->’ token
+     else{       (PORT -> OUT &= ~(1 << PIN)); }
+                       ^~
+LCD_Test.c:130:5: note: in expansion of macro ‘WRITE’
+     WRITE(D2_Port, D2_Port, display);
+     ^~~~~
+LCD_Test.c:77:23: error: expected expression before ‘->’ token
+     if(DATA){   (PORT -> OUT |= (1 << PIN));  }     \
+                       ^~
+LCD_Test.c:132:5: note: in expansion of macro ‘WRITE’
+     WRITE(D3_Port, D3_Port, 1);
+     ^~~~~
+LCD_Test.c:78:23: error: expected expression before ‘->’ token
+     else{       (PORT -> OUT &= ~(1 << PIN)); }
+                       ^~
+LCD_Test.c:132:5: note: in expansion of macro ‘WRITE’
+     WRITE(D3_Port, D3_Port, 1);
+     ^~~~~
+LCD_Test.c:77:23: error: expected expression before ‘->’ token
+     if(DATA){   (PORT -> OUT |= (1 << PIN));  }     \
+                       ^~
+LCD_Test.c:133:5: note: in expansion of macro ‘WRITE’
+     WRITE(D4_Port, D4_Port, 0);
+     ^~~~~
+LCD_Test.c:78:23: error: expected expression before ‘->’ token
+     else{       (PORT -> OUT &= ~(1 << PIN)); }
+                       ^~
+LCD_Test.c:133:5: note: in expansion of macro ‘WRITE’
+     WRITE(D4_Port, D4_Port, 0);
+     ^~~~~
+LCD_Test.c:77:23: error: expected expression before ‘->’ token
+     if(DATA){   (PORT -> OUT |= (1 << PIN));  }     \
+                       ^~
+LCD_Test.c:134:5: note: in expansion of macro ‘WRITE’
+     WRITE(D5_Port, D5_Port, 0);
+     ^~~~~
+LCD_Test.c:78:23: error: expected expression before ‘->’ token
+     else{       (PORT -> OUT &= ~(1 << PIN)); }
+                       ^~
+LCD_Test.c:134:5: note: in expansion of macro ‘WRITE’
+     WRITE(D5_Port, D5_Port, 0);
+     ^~~~~
+LCD_Test.c:77:23: error: expected expression before ‘->’ token
+     if(DATA){   (PORT -> OUT |= (1 << PIN));  }     \
+                       ^~
+LCD_Test.c:135:5: note: in expansion of macro ‘WRITE’
+     WRITE(D6_Port, D6_Port, 0);
+     ^~~~~
+LCD_Test.c:78:23: error: expected expression before ‘->’ token
+     else{       (PORT -> OUT &= ~(1 << PIN)); }
+                       ^~
+LCD_Test.c:135:5: note: in expansion of macro ‘WRITE’
+     WRITE(D6_Port, D6_Port, 0);
+     ^~~~~
+LCD_Test.c:77:23: error: expected expression before ‘->’ token
+     if(DATA){   (PORT -> OUT |= (1 << PIN));  }     \
+                       ^~
+LCD_Test.c:136:5: note: in expansion of macro ‘WRITE’
+     WRITE(D7_Port, D7_Port, 0);
+     ^~~~~
+LCD_Test.c:78:23: error: expected expression before ‘->’ token
+     else{       (PORT -> OUT &= ~(1 << PIN)); }
+                       ^~
+LCD_Test.c:136:5: note: in expansion of macro ‘WRITE’
+     WRITE(D7_Port, D7_Port, 0);
+     ^~~~~
