@@ -180,10 +180,10 @@ enum Edges edge_encoder(int32_t pos){
     }else if(BETWEEN(pos, 48, -48)){
         return Center_e;
 
-    }else if(BETWEEN(pos, -47, AVG(-142, -237) + 1)){
+    }else if(BETWEEN(pos, -47, AVG(-142, -237))){
         return Left_e;
 
-    }else if(BETWEEN(pos, AVG(-142, -237), -333)){
+    }else if(BETWEEN(pos, AVG(-142, -237) + 1, -333)){
         return FarLeft_e;
 
     //Should never be possible to get here
@@ -214,6 +214,17 @@ int main(){
         position = Reflectance_Position(data);
         this_edge = edge_encoder(position);
 
-        current_state = &fsm[this_edge];
+        if(this_edge == Error_e){
+            while(1){
+                set_color(RED);
+                Clock_Delay1ms(1000);
+                set_color(BLUE);
+                Clock_Delay1ms(1000);
+            }
+            
+        }else{
+            current_state = current_state->next[this_edge];//&fsm[this_edge];
+        }
+
     }
 }

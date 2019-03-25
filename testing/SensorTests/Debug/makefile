@@ -162,6 +162,10 @@ clean:
 	-@echo 'Finished clean'
 	-@echo ' '
 
+flash: Lab06_GPIO.out
+	/opt/ccstudio/ccsv8/ccs_base/DebugServer/bin/DSLite load --config=../targetConfigs/MSP432P401R.ccxml Lab06_GPIO.out
+
+
 .PHONY: all clean dependents
 .SECONDARY:
 
