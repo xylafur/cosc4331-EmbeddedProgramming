@@ -60,6 +60,9 @@ policies, either expressed or implied, of the FreeBSD Project.
 #include "../inc/SysTick.h"
 #include "../inc/Bump.h"
 
+// After digging through the libs a bit, think this is where float is defined
+#include <math.h>
+
 // *******Lab 12 solution*******
 //
 #define MAKE_OUTPUT(PORT, PIN)  \
@@ -140,10 +143,31 @@ void PWM(uint16_t high_time_us, uint16_t period_ms){
 
 void spin(uint16_t duty, uint32_t time, uint16_t period){
     uint32_t t;
-    for(t = 0; t < time ; t += PERIOD_ms){
+    for(t = 0; t < time ; t += period){
         PWM(duty, period);
         //TODO: Add in bumber stop logic
         //
+    }
+}
+
+//Ramp up the wheels up to 'duty' over the time period 'time'
+void ramp_up(uint16_t max_duty, uint32_t time, uint16_t period){
+    uint32_t t;
+    uint16_t duty;
+
+    for(t = 0; t < time ; t += period){
+        duty = (uint16_t)(((float)t / time) * max_duty);
+        PWM(duty, period);
+    }
+}
+
+void ramp_down(uint16_t initial_duty, uint32_t ramp_time, uint16_t period){
+    uint32_t t;
+    uint16_t duty;
+
+    for(t = 0; t < ramp_time ; t += period){
+        duty = (uint16_t)((1 - ((float)t / ramp_time)) * initial_duty);
+        PWM(duty, period);
     }
 }
 
@@ -173,6 +197,28 @@ void Motor_ForwardSimple(uint16_t duty, uint32_t time){
     spin(duty, time, PERIOD_ms);
 }
 
+
+
+/*  Ramp the wheels up to the duty cycle 'duty' over the period of time
+ *  'ramp_time' and then continue spinning the wheels until 'run_time' has
+ *  passed total. *
+ *
+ *  run_time and ramp_tim should both be in units of 10ms
+ */
+void Motor_Forward_With_Ramp(uint16_t duty, uint32_t run_time, uint32_t ramp_time){
+    RIGHT_WHEEL_FORWARD();
+    LEFT_WHEEL_FORWARD();
+
+    ramp_up(duty, ramp_time, PERIOD_ms);
+    spin(duty, run_time - ramp_time, PERIOD_ms);
+}
+                             
+
+void RampDown(uint16_t initial_duty, uint32_t ramp_time){
+    ramp_down(initial_duty, ramp_time, PERIOD_ms);
+}
+
+
 void Motor_BackwardSimple(uint16_t duty, uint32_t time){
     RIGHT_WHEEL_BACKWARD();
     LEFT_WHEEL_BACKWARD();
@@ -180,21 +226,47 @@ void Motor_BackwardSimple(uint16_t duty, uint32_t time){
     spin(duty, time, PERIOD_ms);
 }
 
+void Motor_Backward_With_Ramp(uint16_t duty, uint32_t run_time, uint32_t ramp_time){
+    RIGHT_WHEEL_BACKWARD();
+    LEFT_WHEEL_BACKWARD();
+
+    ramp_up(duty, ramp_time, PERIOD_ms);
+    spin(duty, run_time - ramp_time, PERIOD_ms);
+}
+
 // He says to have rigth wheel sleep, but I just had it spin backwards!
-void Motor_LeftSimple(uint16_t duty, uint32_t time){
+void Motor_RightSimple(uint16_t duty, uint32_t time){
     RIGHT_WHEEL_BACKWARD();
     LEFT_WHEEL_FORWARD();
 
     spin(duty, time, PERIOD_ms);
 }
 
-void Motor_RightSimple(uint16_t duty, uint32_t time){
+void Motor_Ramp_Right(uint16_t duty, uint32_t run_time, uint32_t ramp_time){
+    RIGHT_WHEEL_BACKWARD();
+    LEFT_WHEEL_FORWARD();
+
+    ramp_up(duty, ramp_time, PERIOD_ms);
+    spin(duty, run_time - ramp_time, PERIOD_ms);
+}
+ 
+
+void Motor_LeftSimple(uint16_t duty, uint32_t time){
     RIGHT_WHEEL_FORWARD();
     LEFT_WHEEL_BACKWARD();
 
     spin(duty, time, PERIOD_ms);
 }
 
+
+void Motor_Ramp_Left(uint16_t duty, uint32_t run_time, uint32_t ramp_time){
+    RIGHT_WHEEL_FORWARD();
+    LEFT_WHEEL_BACKWARD();
+
+    ramp_up(duty, ramp_time, PERIOD_ms);
+    spin(duty, run_time - ramp_time, PERIOD_ms);
+}
+ 
 
 
 void MoveForwardBack(){
@@ -220,3 +292,44 @@ void MoveSquare(){
 
     Motor_ForwardSimple(5000, 500);
 }
+
+void RampedSquare(){
+    Motor_Forward_With_Ramp(5000, 1000, 500);
+    RampDown(5000, 500);
+
+    Motor_Ramp_Left(2500, 1000, 1000);
+    RampDown(2500, 500);
+
+    Motor_Forward_With_Ramp(5000, 1000, 500);
+    RampDown(5000, 500);
+
+    Motor_Ramp_Left(2500, 1000, 1000);
+    RampDown(2500, 500);
+
+    Motor_Forward_With_Ramp(5000, 1000, 500);
+    RampDown(5000, 500);
+}
+
+void InverseRampedSquare(){
+    Motor_Forward_With_Ramp(5000, 1000, 500);
+    RampDown(5000, 500);
+
+    Motor_Ramp_Right(2500, 400, 400);
+    RampDown(2500, 100);
+
+    Motor_Forward_With_Ramp(5000, 1000, 500);
+    RampDown(5000, 500);
+
+    Motor_Ramp_Right(2500, 400, 400);
+    RampDown(2500, 100);
+
+    Motor_Forward_With_Ramp(5000, 1000, 500);
+    RampDown(5000, 500);
+}
+
+void FullRampTest(){
+    Motor_Forward_With_Ramp(10000, 1500, 500);
+    RampDown(10000, 500);
+}
+
+

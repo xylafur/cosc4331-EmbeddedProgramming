@@ -106,6 +106,9 @@ void Motor_ForwardExtraSimple();
  */
 void Motor_ForwardSimple(uint16_t duty, uint32_t time);
 
+void RampDown(uint16_t initial_duty, uint32_t ramp_time);
+
+void Motor_Forward_With_Ramp(uint16_t duty, uint32_t run_time, uint32_t ramp_time);
 
 /**
  * Drives both motors backward at duty (100 to 9900).
@@ -135,6 +138,7 @@ void Motor_BackwardSimple(uint16_t duty, uint32_t time);
  */
 void Motor_LeftSimple(uint16_t duty, uint32_t time);
 
+void Motor_Ramp_Left(uint16_t duty, uint32_t run_time, uint32_t ramp_time);
 
 /**
  * Drives just the right motor forward at duty (100 to 9900).
@@ -150,8 +154,14 @@ void Motor_LeftSimple(uint16_t duty, uint32_t time);
  */
 void Motor_RightSimple(uint16_t duty, uint32_t time);
 
+void Motor_Ramp_Right(uint16_t duty, uint32_t run_time, uint32_t ramp_time);
 
 void MoveForwardBack();
 void MoveSquare();
+
+void RampedSquare();
+void InverseRampedSquare();
+
+void FullRampTest();
 
 #endif /* MOTORSIMPLE_H_ */

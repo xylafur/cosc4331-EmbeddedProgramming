@@ -113,43 +113,28 @@ int Program12_3(void){
 }
 
 void main(){
-    //Just test that wheels actually spin
     Clock_Init48MHz(); // makes it 48 MHz
     SysTick_Init();
     Motor_InitSimple(); // initialization
+
     LaunchPad_Init();   // buttons and LEDs
 
+    /*
     MoveForwardBack();
 
     SysTick_Wait10ms(200);
 
     MoveSquare();
+    */
 
-}
+    //Motor_Forward_With_Ramp(5000, 1000, 500);
+    //RampDown(5000, 500);
+    //
+    //RampedSquare();
 
+    //SysTick_Wait10ms(200);
 
-// does the robot move straight?
-//int main(void){ // Program12_4
-int notmain(void){
-  Clock_Init48MHz();
-  LaunchPad_Init();   // built-in switches and LEDs
-  Bump_Init();        // bump switches
-  Motor_InitSimple(); // initialization
-  while(1){
-  //  Pause(); // start on SW1 or SW2
-    LaunchPad_Output(0x02);
-    Motor_ForwardSimple(5000,350);  // 3.5 seconds and stop
-    LaunchPad_Output(0x00);
-    Motor_StopSimple(); Clock_Delay1ms(500);
-    LaunchPad_Output(0x01);
-    Motor_BackwardSimple(3000,200); // reverse 2 sec
-    LaunchPad_Output(0x03);
-    Motor_LeftSimple(3000,200);     // right turn 2 sec
-    if(Bump_Read()){
-      LaunchPad_Output(0x01);
-      Motor_BackwardSimple(3000,100);// reverse 1 sec
-      LaunchPad_Output(0x03);
-      Motor_LeftSimple(3000,200);   // right turn 2 sec
-    }
-  }
+    //InverseRampedSquare();
+
+    FullRampTest();
 }
