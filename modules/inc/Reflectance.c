@@ -81,6 +81,17 @@ void Reflectance_Init(void){
 
 }
 
+void LineSensorTest_Init(void){
+    Reflectance_Init();
+
+    //Copying this from LaunchPad.c
+    P2->SEL0 &= ~0x07;
+    P2->SEL1 &= ~0x07;    // 1) configure P2.2-P2.0 as GPIO
+    P2->DIR |= 0x07;      // 2) make P2.2-P2.0 out
+    P2->DS |= 0x07;       // 3) activate increased drive strength
+    P2->OUT &= ~0x07;     //    all LEDs off
+}
+
 // ------------Reflectance_Read------------
 // Read the eight sensors
 // Turn on the 8 IR LEDs
@@ -112,6 +123,63 @@ uint8_t Reflectance_Read(uint32_t sleep_time)
     P5->OUT &= ~(1 << 3);
 
     return data;
+}
+
+// Color    LED(s) Port2
+// dark     ---    0
+// red      R--    0x01
+// green    -G-    0x02
+// yellow   RG-    0x03
+// blue     --B    0x04
+// pink     R-B    0x05
+// sky blue -GB    0x06
+// white    RGB    0x07
+void set_color(uint8_t sensor_data){
+    uint8_t led_color = 0;
+
+    if(sensor_data == 0xFF | sensor_data == 0x0){
+        led_color = 0;
+
+    }else{
+        if(sensor_data & 0x1){
+            led_color |= 0x1;
+
+        }if(sensor_data & 0x2){
+            led_color |= 0x2;
+
+        }if(sensor_data & 0x4){
+            led_color |= 0x4;
+
+        // At this point, there are no more possible color combinations..
+        }if(sensor_data & 0x8){
+            led_color |= 0x1;
+
+        }if(sensor_data & 0x10){
+            led_color |= 0x2;
+
+        }if(sensor_data & 0x20){
+            led_color |= 0x4;
+
+        //ran out of colors again
+        }if(sensor_data & 0x40){
+            led_color |= 0x1;
+
+        }if(sensor_data & 0x80){
+            led_color |= 0x2;
+        }
+    }
+
+    //The led's are the last 3 bits of P2, so P2.0, P2.1 and P2.2
+    P2->OUT = (P2->OUT & 0xF8) | led_color;
+
+
+
+}
+
+void LineSensorTest(uint32_t time){
+    uint8_t sensor_data = Reflectance_Read(time);
+    set_color(sensor_data);
+
 }
 
 // ------------Reflectance_Center------------
@@ -152,6 +220,12 @@ int32_t Reflectance_Position(uint8_t data){
         }
 
     }
+    //For the edge case of when both of the center sensors are triggered,
+    //resulting in an average of 0
+    if(ones > 0 && sum == 0){
+        sum = ones;
+    }
+
     // d = sum(i=0..7, bi * wi) / sum(i=0..7, bi)
     return sum / ones;
 
@@ -183,3 +257,4 @@ uint8_t Reflectance_End(void){
     // write this as part of Lab 10
  return 0; // replace this line
 }
+

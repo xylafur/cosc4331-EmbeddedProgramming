@@ -76,6 +76,19 @@ policies, either expressed or implied, of the FreeBSD Project.
 #define REFLECTANCE_H_
 
 
+/*  Color combinations for the internal LEDs
+ */
+#define DARK 0x00
+#define RED 0x01
+#define BLUE 0x04
+#define GREEN 0x02
+#define YELLOW 0x03
+#define SKYBLUE 0x06
+#define WHITE 0x07
+#define PINK 0x05
+
+
+
 /**
  * Initialize the GPIO pins associated with the QTR-8RC.
  * One output to IR LED, 8 inputs from the sensor array.

@@ -52,14 +52,27 @@ policies, either expressed or implied, of the FreeBSD Project.
 
 #include <stdint.h>
 #include "msp.h"
+#include "../inc/PinManip.h"
+
+#define NUM_BUMP_SENSORS 6
+#define BUMP_SENSOR_PORT P4
+//I wanted to make it dynamically grab the port as well but the port is some
+//weird type, actually two weird types, so it would be a bit wonky.  Still
+//opting for this because of less magic.  Though this does obviously force us
+//to use the same port for all of the bump sensors
+uint8_t bump_sensor_pins [NUM_BUMP_SENSORS] = {0, 2, 3, 5, 6, 7};
+
 // Initialize Bump sensors
 // Make six Port 4 pins inputs
 // Activate interface pullup
 // pins 7,6,5,3,2,0
 void Bump_Init(void){
-    // write this as part of Lab 10
-  
+    uint8_t ii;
+    for(ii = 0; ii < NUM_BUMP_SENSORS; ii++){
+        MK_GPIO(BUMP_SENSOR_PORT, bump_sensor_pins[ii], INPUT);
+    }
 }
+
 // Read current state of 6 switches
 // Returns a 6-bit positive logic result (0 to 63)
 // bit 5 Bump5
@@ -69,8 +82,11 @@ void Bump_Init(void){
 // bit 1 Bump1
 // bit 0 Bump0
 uint8_t Bump_Read(void){
-    // write this as part of Lab 10
+    uint8_t ii, data = 0;
+    for(ii = 0; ii < NUM_BUMP_SENSORS; ii++){
+        data |= (READ(BUMP_SENSOR_PORT, bump_sensor_pins[ii]) << ii);
+    }
 
-    return 0; // replace this line
+    return data;
 }
 

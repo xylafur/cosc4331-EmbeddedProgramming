@@ -74,15 +74,6 @@ int Program6_1(void){
 
 
 
-#define DARK 0x00
-#define RED 0x01
-#define BLUE 0x04
-#define GREEN 0x02
-#define YELLOW 0x03
-#define SKYBLUE 0x06
-#define WHITE 0x07
-#define PINK 0x05
-
 
 enum States {
     OffLeft_s,    //0
@@ -154,15 +145,6 @@ State_t fsm [NUM_STATES] = {
     {"Far Right", BLUE, SLEEPTIME, GET_TRANS(Center2, OffRight)},
     {"Off Right", SKYBLUE, SLEEPTIME, GET_TRANS(Center2, OffRight)},
 };
-
-#undef OffLeft
-#undef FarLeft
-#undef Left
-#undef Center1
-#undef Center2
-#undef Right
-#undef FarRight
-#undef OffRight
 
 #define AVG(a, b) ((a + b)/2)
 #define BETWEEN(pos, max, min) (pos > min && pos < max)
