@@ -73,6 +73,11 @@ policies, either expressed or implied, of the FreeBSD Project.
 #define HIGH(PORT, PIN) (PORT->OUT |= (1 << PIN))
 #define LOW(PORT, PIN) (PORT->OUT &= ~(1 << PIN))
 
+#define WHEELS_LEFT() RIGHT_WHEEL_FORWARD(); LEFT_WHEEL_BACKWARD()
+#define WHEELS_RIGHT()     RIGHT_WHEEL_BACKWARD(); LEFT_WHEEL_FORWARD()
+#define WHEELS_FORWARD()     RIGHT_WHEEL_FORWARD(); LEFT_WHEEL_FORWARD()
+#define WHEELS_BACKWARD()     RIGHT_WHEEL_BACKWARD(); LEFT_WHEEL_BACKWARD()
+
 
 void Motor_InitSimple(void){
   /*    The right motor is connected as follows:
@@ -141,6 +146,63 @@ void PWM(uint16_t high_time_us, uint16_t period_ms){
     SysTick_Wait1us(low_time_us);
 }
 
+#define MAX(a, b) a > b ? a : b
+
+void independent_pwm(uint16_t right_high_us, uint16_t left_high_us,
+                     uint16_t period_ms, uint16_t granularity_us){
+    RIGHT_WHEEL_ON();
+    LEFT_WHEEL_ON();
+
+    uint16_t max = MAX(right_high_us, left_high_us);
+
+    uint16_t low_time_us = period_ms * 1000 - max;
+
+    //bit 1 is left wheel, bit 0 is right wheel
+    uint8_t spinning = 3;
+    uint16_t time = 0;
+    while(spinning){
+        if(spinning & 1 && time >= right_high_us){
+            RIGHT_WHEEL_OFF();
+            spinning &= ~((uint8_t)1);
+        }
+        if(spinning & 2 && time >= left_high_us){
+            LEFT_WHEEL_OFF();
+            spinning &= ~((uint8_t)2);
+        }
+        //TODO: Calculate how much time is lost by these above instructions!!
+        SysTick_Wait1us(granularity_us);
+        time += granularity_us;
+    }
+
+    SysTick_Wait1us(low_time_us);
+}
+
+#define GRANULARITY_us 100
+void spin_wheels_independent(uint16_t right_duty, uint16_t left_duty,
+                             uint32_t time_ms, uint16_t period_ms){
+    uint16_t right_high_us = right_duty * period_ms * 1000 / 100;
+    uint16_t left_high_us = left_duty * period_ms * 1000 / 100;
+
+    uint32_t t;
+    for(t = 0; t < time_ms; t+= period_ms){
+        independent_pwm(right_high_us, left_high_us,
+                        period_ms, GRANULARITY_us);
+        
+    }
+}
+
+void soft_left(uint32_t time_ms){
+    WHEELS_FORWARD();
+    spin_wheels_independent(3000, 5000, time_ms, PERIOD_ms);
+}
+
+void soft_right(uint32_t time_ms){
+    WHEELS_FORWARD();
+    spin_wheels_independent(5000, 3000, time_ms, PERIOD_ms);
+}
+
+
+
 void spin(uint16_t duty, uint32_t time, uint16_t period){
     uint32_t t;
     for(t = 0; t < time ; t += period){
@@ -186,14 +248,14 @@ void Motor_ForwardExtraSimple(){
     LEFT_WHEEL_OFF();
 }
 
+
+
 /*  Duty is the time in microseconds that the wave should be high
  *  Time is the time in 10ms that the pulse should happen
  */
 void Motor_ForwardSimple(uint16_t duty, uint32_t time){
     //Set the direction to forward (0) for each motor
-    RIGHT_WHEEL_FORWARD();
-    LEFT_WHEEL_FORWARD();
-
+    WHEELS_FORWARD();
     spin(duty, time, PERIOD_ms);
 }
 
@@ -206,8 +268,7 @@ void Motor_ForwardSimple(uint16_t duty, uint32_t time){
  *  run_time and ramp_tim should both be in units of 10ms
  */
 void Motor_Forward_With_Ramp(uint16_t duty, uint32_t run_time, uint32_t ramp_time){
-    RIGHT_WHEEL_FORWARD();
-    LEFT_WHEEL_FORWARD();
+    WHEELS_FORWARD();
 
     ramp_up(duty, ramp_time, PERIOD_ms);
     spin(duty, run_time - ramp_time, PERIOD_ms);
@@ -219,55 +280,44 @@ void RampDown(uint16_t initial_duty, uint32_t ramp_time){
 }
 
 
-void Motor_BackwardSimple(uint16_t duty, uint32_t time){
-    RIGHT_WHEEL_BACKWARD();
-    LEFT_WHEEL_BACKWARD();
 
+void Motor_BackwardSimple(uint16_t duty, uint32_t time){
+    WHEELS_BACKWARD();
     spin(duty, time, PERIOD_ms);
 }
 
 void Motor_Backward_With_Ramp(uint16_t duty, uint32_t run_time, uint32_t ramp_time){
-    RIGHT_WHEEL_BACKWARD();
-    LEFT_WHEEL_BACKWARD();
+    WHEELS_BACKWARD();
 
     ramp_up(duty, ramp_time, PERIOD_ms);
     spin(duty, run_time - ramp_time, PERIOD_ms);
 }
 
-// He says to have rigth wheel sleep, but I just had it spin backwards!
-void Motor_RightSimple(uint16_t duty, uint32_t time){
-    RIGHT_WHEEL_BACKWARD();
-    LEFT_WHEEL_FORWARD();
 
+
+void Motor_RightSimple(uint16_t duty, uint32_t time){
+    WHEELS_RIGHT();
     spin(duty, time, PERIOD_ms);
 }
 
 void Motor_Ramp_Right(uint16_t duty, uint32_t run_time, uint32_t ramp_time){
-    RIGHT_WHEEL_BACKWARD();
-    LEFT_WHEEL_FORWARD();
-
+    WHEELS_RIGHT();
     ramp_up(duty, ramp_time, PERIOD_ms);
     spin(duty, run_time - ramp_time, PERIOD_ms);
 }
  
 
 void Motor_LeftSimple(uint16_t duty, uint32_t time){
-    RIGHT_WHEEL_FORWARD();
-    LEFT_WHEEL_BACKWARD();
-
+    WHEELS_LEFT();    
     spin(duty, time, PERIOD_ms);
 }
 
-
 void Motor_Ramp_Left(uint16_t duty, uint32_t run_time, uint32_t ramp_time){
-    RIGHT_WHEEL_FORWARD();
-    LEFT_WHEEL_BACKWARD();
+    WHEELS_LEFT();
 
     ramp_up(duty, ramp_time, PERIOD_ms);
     spin(duty, run_time - ramp_time, PERIOD_ms);
 }
- 
-
 
 void MoveForwardBack(){
     Motor_ForwardSimple(5000, 1000);

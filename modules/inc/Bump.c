@@ -69,7 +69,7 @@ uint8_t bump_sensor_pins [NUM_BUMP_SENSORS] = {0, 2, 3, 5, 6, 7};
 void Bump_Init(void){
     uint8_t ii;
     for(ii = 0; ii < NUM_BUMP_SENSORS; ii++){
-        MK_GPIO(BUMP_SENSOR_PORT, bump_sensor_pins[ii], INPUT);
+        MK_GPIO_PULLUP(BUMP_SENSOR_PORT, bump_sensor_pins[ii]);
     }
 }
 

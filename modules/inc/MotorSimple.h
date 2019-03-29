@@ -164,4 +164,21 @@ void InverseRampedSquare();
 
 void FullRampTest();
 
+/*  PWM where each wheel can be driven at a different rate.
+ *  Assumes that the direction of the wheels has already been set.
+ *  Granularity is how often we poll to see if we have surfassed the high and
+ *  low thresholds
+ */
+void independent_pwm(uint16_t right_high_us, uint16_t left_high_us,
+                     uint16_t period_ms, uint16_t granularity_us);
+
+/*  Spin each of the wheels at a different rate, using the given duty cycle
+ *  The duty cycle is expected as a percent between 0 and 1001
+ */
+void spin_wheels_independent(uint16_t right_duty, uint16_t left_duty,
+                             uint32_t time_ms, uint16_t period_ms);
+
+void soft_left(uint32_t time_ms);
+void soft_right(uint32_t time_ms);
+
 #endif /* MOTORSIMPLE_H_ */
