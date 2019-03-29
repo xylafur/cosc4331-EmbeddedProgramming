@@ -10,6 +10,7 @@ GEN_CMDS__FLAG :=
 ORDERED_OBJS += \
 "./Clock.obj" \
 "./SysTick.obj" \
+"./LaunchPad.obj" \
 "./Reflectance.obj" \
 "./FSM.obj" \
 "./MotorSimple.obj" \

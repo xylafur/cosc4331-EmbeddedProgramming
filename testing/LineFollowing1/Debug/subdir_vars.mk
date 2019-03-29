@@ -11,6 +11,7 @@ INC_DIR = /home/yelsek/projects/cosc4331-EmbeddedProgramming/modules/inc
 C_SRCS += \
 $(INC_DIR)/Clock.c \
 $(INC_DIR)/SysTick.c \
+$(INC_DIR)/LaunchPad.c \
 $(INC_DIR)/Reflectance.c \
 $(INC_DIR)/FSM.c \
 $(INC_DIR)/MotorSimple.c \

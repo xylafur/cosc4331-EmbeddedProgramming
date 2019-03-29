@@ -60,6 +60,7 @@ policies, either expressed or implied, of the FreeBSD Project.
 #include "../inc/Reflectance.h"
 #include "../inc/Clock.h"
 #include "../inc/TExaS.h"
+#include "../inc/LaunchPad.h"
 
 #include "../inc/FSM.h"
 
@@ -73,7 +74,11 @@ int32_t Position; // 332 is right, and -332 is left of center
  */
 int main(){
     Clock_Init48MHz();
+    SysTick_Init();
+    Motor_InitSimple();
     LineSensorTest_Init();
+
+    LaunchPad_Init();
 
     uint8_t data;
     int32_t position;
