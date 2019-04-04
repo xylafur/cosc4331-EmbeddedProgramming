@@ -17,7 +17,7 @@
 
 #define MK_GPIO_PULLUP(PORT, PIN) MK_GPIO(PORT, PIN, INPUT);                \
                                   PORT -> REN |= (1 << PIN);                \
-                                  PORT -> OUT &= ~(1 << PIN)
+                                  PORT -> OUT |= (1 << PIN)
 
 //TODO: Check that this is correct!!
 #define OUTPUT  1

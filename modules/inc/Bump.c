@@ -60,7 +60,7 @@ policies, either expressed or implied, of the FreeBSD Project.
 //weird type, actually two weird types, so it would be a bit wonky.  Still
 //opting for this because of less magic.  Though this does obviously force us
 //to use the same port for all of the bump sensors
-uint8_t bump_sensor_pins [NUM_BUMP_SENSORS] = {0, 2, 3, 5, 6, 7};
+uint8_t bump_sensor_pins [NUM_BUMP_SENSORS] = {0, 1, 2, 3, 4, 5};
 
 // Initialize Bump sensors
 // Make six Port 4 pins inputs
@@ -83,10 +83,12 @@ void Bump_Init(void){
 // bit 0 Bump0
 uint8_t Bump_Read(void){
     uint8_t ii, data = 0;
-    for(ii = 0; ii < NUM_BUMP_SENSORS; ii++){
-        data |= (READ(BUMP_SENSOR_PORT, bump_sensor_pins[ii]) << ii);
+    //Skipping the first sensor now because its fucked up
+    for(ii = 1; ii < NUM_BUMP_SENSORS; ii++){
+        data |= (READ(BUMP_SENSOR_PORT, bump_sensor_pins[ii]));
     }
-
+    data |= 0x1;
+    
     return data;
 }
 

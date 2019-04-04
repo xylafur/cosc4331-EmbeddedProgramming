@@ -1,0 +1,15 @@
+To integrate the line sensor with the FSM, we would first add more states (we
+have dont this) which corespond to different locations on the sensor (center,
+left, far left, off on the left side, etc..) and then determine how we want to
+write the motors for each of these situations.
+
+For example if we are in the center we would just drive straight, both wheels
+with the same speed.
+
+If we were waaaay off to the left, we would turn right hard.
+
+If we were rust a little off to the right, we would spin the left wheel a
+little faster than the right wheel.
+
+Basically all you have to do is instead of blinking leds based on your state,
+drive the motors in a particular way based on your state
