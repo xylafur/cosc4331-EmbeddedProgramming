@@ -45,13 +45,26 @@ uint32_t buffer_write_flash_flush(uint16_t data){
     if(buffer_pos > FLASH_BLOCK_SIZE){
         Debug_FlashRecord(Buffer);
         buffer_pos = 0;
+        memset(Buffer, 0, FLASH_BLOCK_SIZE);
     }
 }
 
 
+uint32_t write_flash_force_flush(uint16_t data){
+    if(buffer_pos != 0){
+        Debug_FlashRecord(Buffer);
+        memset(Buffer, 0, FLASH_BLOCK_SIZE);
+        buffer_pos = 0;
+    }
+    Buffer[buffer_pos] = data;
+    Debug_FlashRecord(Buffer);
+    memset(Buffer, 0, FLASH_BLOCK_SIZE);
+    buffer_pos = 0;
+}
+
 /*  I don't think that I'll ever need these, but Just in case I'm leaving this
  *  here
- */
+ *
 static uint16_t ram_dump_data [NUM_RAM_DUMP_ENTRIES];
 static uint8_t ram_dump_index;
 
@@ -65,3 +78,6 @@ void Debug_Dump(uint8_t bump, uint8_t line){
   ram_dump_data[ram_dump_index++] = (bump << 8) | line;
 
 }
+ *
+ */
+

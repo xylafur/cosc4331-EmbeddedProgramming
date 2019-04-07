@@ -59,6 +59,8 @@ those of the authors and should not be interpreted as representing official
 policies, either expressed or implied, of the FreeBSD Project.
 */
 
+#include "cpu.h"
+
 /**
  * Initialize SysTick with busy wait running at bus clock
  *
@@ -80,16 +82,6 @@ void SysTick_Init(void);
  * @brief   Time delay using SysTick
  */
 void SysTick_Wait(uint32_t delay);
-
-// number of cycles to spin for 1 micro seconds and 1 mili second
-#ifndef CYCLES_PER_uS
-    #define CYCLES_PER_uS 48
-    #define CYCLES_PER_10_uS 480
-    #define CYCLES_PER_mS 48000
-    #define CYCLES_PER_10_mS 480000
-#endif
-
-
 
 /**
  * Time delay using busy wait

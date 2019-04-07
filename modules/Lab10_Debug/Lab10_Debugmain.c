@@ -52,16 +52,45 @@ policies, either expressed or implied, of the FreeBSD Project.
 #include "../inc/Reflectance.h"
 #include "../inc/Clock.h"
 #include "../inc/SysTickInts.h"
+#include "../inc/cpu.h"
 #include "../inc/CortexM.h"
 #include "../inc/LaunchPad.h"
 #include "../inc/FlashDebug.h"
 
-#define NUM_RAM_DUMP_ENTRIES 256
+uint8_t sensor_reading = 0;
 
-
-
+uint8_t interrupt_counter = 0;
 void SysTick_Handler(void){ // every 1ms
-  // write this as part of Lab 10
+    if(interrupt_counter % 10 == 0){
+        Reflectance_Start();
+        buffer_write_flash_flush(0xdead);
+        buffer_write_flash_flush(0xdbeef);
+
+    }else if(interrupt_counter % 10 == 1){
+        sensor_reading = Reflectance_End();
+        buffer_write_flash_flush((uint16_t)sensor_reading);
+
+
+    }
+    interrupt_counter++;
+}
+
+void LineSensorInterrupts(void){
+    Clock_Init48MHz();
+    Debug_FlashInit();
+    Bump_Init();
+    Reflectance_Init();
+    LaunchPad_Init();
+
+    //Have the timer trigger an interrupt every ms
+    SysTick_Init(CYCLES_PER_mS, 0);
+    EnableInterrupts();
+
+    write_flash_force_flush(0xcafe);
+
+    while(1){
+        set_color(sensor_reading);
+    }
 }
 
 int BumpSensorVerification(void){
@@ -113,5 +142,6 @@ int BumpSensorVerification(void){
 }
 
 int main(){
-    BumpSensorVerification();
+    //BumpSensorVerification();
+    LineSensorInterrupts();
 }

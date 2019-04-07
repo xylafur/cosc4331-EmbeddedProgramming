@@ -20,5 +20,6 @@ void Debug_FlashRecord(uint16_t *pt);
  *  to the next valid spot in flash
  */
 uint32_t buffer_write_flash_flush(uint16_t data);
+uint32_t write_flash_force_flush(uint16_t data);
 
 #endif

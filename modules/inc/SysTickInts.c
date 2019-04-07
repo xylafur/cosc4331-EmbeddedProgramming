@@ -47,6 +47,10 @@ policies, either expressed or implied, of the FreeBSD Project.
 #include "msp.h"
 
 
+#define SYSTICK_BUS_CLOCK   0x4
+#define SYSTICK_INTERRUPT   0x2
+#define SYSTICK_ENABLE      0x1
+
 // **************SysTick_Init*********************
 // Initialize SysTick periodic interrupts
 // Input: interrupt period
@@ -60,6 +64,8 @@ void SysTick_Init(uint32_t period, uint32_t priority){
   SysTick->LOAD = period - 1;     // 2) reload value sets period
   SysTick->VAL = 0;               // 3) any write to current clears it
   SCB->SHP[11] = priority<<5;     // set priority into top 3 bits of 8-bit register
-  SysTick->CTRL = 0x00000007;     // 4) enable SysTick with core clock and interrupts
+
+  // 4) enable SysTick with core clock and interrupts
+  SysTick->CTRL = SYSTICK_BUS_CLOCK | SYSTICK_INTERRUPT | SYSTICK_ENABLE;
 }
 
