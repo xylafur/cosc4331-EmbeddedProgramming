@@ -92,7 +92,7 @@ int main(){
         drive_motor(current_state->this_state);
 
         //sleep for the specified time
-        Clock_Delay1ms(current_state->delay);
+        //Clock_Delay1ms(current_state->delay);
 
         //Get input data from our sensors
         data = Reflectance_Read(1000);
@@ -100,6 +100,5 @@ int main(){
         this_edge = edge_encoder(position);
 
         current_state = current_state->next[this_edge];
-
     }
 }

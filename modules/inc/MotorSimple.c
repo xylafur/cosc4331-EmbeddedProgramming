@@ -177,7 +177,7 @@ void independent_pwm(uint16_t right_high_us, uint16_t left_high_us,
     SysTick_Wait1us(low_time_us);
 }
 
-#define GRANULARITY_us 100
+#define GRANULARITY_us 10
 void spin_wheels_independent(uint16_t right_duty, uint16_t left_duty,
                              uint32_t time_ms, uint16_t period_ms){
     uint16_t right_high_us = right_duty * period_ms * 1000 / 100;
@@ -193,15 +193,34 @@ void spin_wheels_independent(uint16_t right_duty, uint16_t left_duty,
 
 void soft_left(uint32_t time_ms){
     WHEELS_FORWARD();
-    spin_wheels_independent(3000, 5000, time_ms, PERIOD_ms);
+    spin_wheels_independent(25, 15, time_ms, PERIOD_ms);
 }
+
+void hard_left(uint32_t time_ms){
+    WHEELS_FORWARD();
+    spin_wheels_independent(30, 13, time_ms, PERIOD_ms);
+}
+
+void really_hard_left(uint32_t time_ms){
+    WHEELS_FORWARD();
+    spin_wheels_independent(35, 10, time_ms, PERIOD_ms);
+}
+
 
 void soft_right(uint32_t time_ms){
     WHEELS_FORWARD();
-    spin_wheels_independent(5000, 3000, time_ms, PERIOD_ms);
+    spin_wheels_independent(15, 25, time_ms, PERIOD_ms);
 }
 
+void hard_right(uint32_t time_ms){
+    WHEELS_FORWARD();
+    spin_wheels_independent(13, 30, time_ms, PERIOD_ms);
+}
 
+void really_hard_right(uint32_t time_ms){
+    WHEELS_FORWARD();
+    spin_wheels_independent(10, 35, time_ms, PERIOD_ms);
+}
 
 void spin(uint16_t duty, uint32_t time, uint16_t period){
     uint32_t t;

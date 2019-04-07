@@ -220,9 +220,17 @@ int32_t Reflectance_Position(uint8_t data){
         }
 
     }
+
+    //This is kind of a hack for my floor, its a weird white tile and its
+    //triggering all of the sensors (or at least a majority (i think)) so it
+    //thats the case I want the robot to think that we're lost so we can end up
+    //going backwards
+    if(ones >= 6){
+        sum = 0;
+    }
     //For the edge case of when both of the center sensors are triggered,
     //resulting in an average of 0
-    if(ones > 0 && sum == 0){
+    else if(ones > 0 && sum == 0){
         sum = ones;
     }
 
