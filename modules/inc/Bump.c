@@ -56,6 +56,7 @@ policies, either expressed or implied, of the FreeBSD Project.
 
 #define NUM_BUMP_SENSORS 6
 #define BUMP_SENSOR_PORT P4
+
 //I wanted to make it dynamically grab the port as well but the port is some
 //weird type, actually two weird types, so it would be a bit wonky.  Still
 //opting for this because of less magic.  Though this does obviously force us
@@ -73,22 +74,15 @@ void Bump_Init(void){
     }
 }
 
-// Read current state of 6 switches
-// Returns a 6-bit positive logic result (0 to 63)
-// bit 5 Bump5
-// bit 4 Bump4
-// bit 3 Bump3
-// bit 2 Bump2
-// bit 1 Bump1
-// bit 0 Bump0
+/*  Read current state of 6 switches
+ *  Returns a bitmask of which switches are on [5:0]
+ */
 uint8_t Bump_Read(void){
     uint8_t ii, data = 0;
-    //Skipping the first sensor now because its fucked up
-    for(ii = 1; ii < NUM_BUMP_SENSORS; ii++){
+    for(ii = 0; ii < NUM_BUMP_SENSORS; ii++){
         data |= (READ(BUMP_SENSOR_PORT, bump_sensor_pins[ii]));
     }
-    data |= 0x1;
     
-    return data;
+    return (~data) & 0x3f;
 }
 

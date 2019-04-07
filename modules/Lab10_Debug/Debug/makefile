@@ -13,6 +13,7 @@ ORDERED_OBJS += \
 "./Clock.obj" \
 "./CortexM.obj" \
 "./FlashProgram.obj" \
+"./FlashDebug.obj" \
 "./Lab10_Debugmain.obj" \
 "./LaunchPad.obj" \
 "./SysTickInts.obj" \
@@ -129,15 +130,8 @@ endif
 EXE_OUTPUTS += \
 Lab10_Debug.out \
 
-EXE_OUTPUTS__QUOTED += \
-"Lab10_Debug.out" \
-
 BIN_OUTPUTS += \
 Lab10_Debug.hex \
-
-BIN_OUTPUTS__QUOTED += \
-"Lab10_Debug.hex" \
-
 
 # All Target
 all: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
@@ -152,10 +146,10 @@ Lab10_Debug.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo ' '
 
 Lab10_Debug.hex: $(EXE_OUTPUTS)
-	@echo 'Building files: $(strip $(EXE_OUTPUTS__QUOTED))'
+	@echo 'Building files: $(strip $(EXE_OUTPUTS))'
 	@echo 'Invoking: MSP432 Hex Utility'
-	"/opt/ccstudio/ccsv8/tools/compiler/ti-cgt-arm_18.1.4.LTS/bin/armhex" --memwidth=8 --romwidth=8 -o "Lab10_Debug.hex" $(EXE_OUTPUTS__QUOTED)
-	@echo 'Finished building: $(strip $(EXE_OUTPUTS__QUOTED))'
+	"/opt/ccstudio/ccsv8/tools/compiler/ti-cgt-arm_18.1.4.LTS/bin/armhex" --memwidth=8 --romwidth=8 -o "Lab10_Debug.hex" $(EXE_OUTPUTS)
+	@echo 'Finished building: $(strip $(EXE_OUTPUTS))'
 	@echo ' '
 
 flash: Lab10_Debug.out
@@ -165,9 +159,10 @@ flash: Lab10_Debug.out
 
 # Other Targets
 clean:
-	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
+	-$(RM) $(BIN_OUTPUTS)$(EXE_OUTPUTS)
 	-$(RM) "Bump.obj" "Clock.obj" "CortexM.obj" "FlashProgram.obj" "Lab10_Debugmain.obj" "LaunchPad.obj" "Reflectance.obj" "SysTickInts.obj" "startup_msp432p401r_ccs.obj" "system_msp432p401r.obj" 
 	-$(RM) "Bump.d" "Clock.d" "CortexM.d" "FlashProgram.d" "Lab10_Debugmain.d" "LaunchPad.d" "Reflectance.d" "SysTickInts.d" "startup_msp432p401r_ccs.d" "system_msp432p401r.d" 
+	$(RM) *.d_raw
 	-@echo 'Finished clean'
 	-@echo ' '
 

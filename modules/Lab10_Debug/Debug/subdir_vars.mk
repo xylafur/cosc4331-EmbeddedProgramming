@@ -6,76 +6,21 @@
 CMD_SRCS += \
 ../msp432p401r.cmd 
 
+INC_DIR = /home/yelsek/projects/cosc4331-EmbeddedProgramming/modules/inc
+
 C_SRCS += \
-../inc/Bump.c \
-../inc/Clock.c \
-../inc/CortexM.c \
-../inc/FlashProgram.c \
+$(INC_DIR)/Bump.c \
+$(INC_DIR)/Clock.c \
+$(INC_DIR)/CortexM.c \
+$(INC_DIR)/FlashProgram.c \
+$(INC_DIR)/FlashDebug.c \
+$(INC_DIR)/LaunchPad.c \
+$(INC_DIR)/Reflectance.c \
+$(INC_DIR)/SysTickInts.c \
 ../Lab10_Debugmain.c \
-../inc/LaunchPad.c \
-../inc/Reflectance.c \
-../inc/SysTickInts.c \
 ../startup_msp432p401r_ccs.c \
 ../system_msp432p401r.c 
 
-C_DEPS += \
-./Bump.d \
-./Clock.d \
-./CortexM.d \
-./FlashProgram.d \
-./Lab10_Debugmain.d \
-./LaunchPad.d \
-./Reflectance.d \
-./SysTickInts.d \
-./startup_msp432p401r_ccs.d \
-./system_msp432p401r.d 
+C_DEPS += $(patsubst %.c,%.d,$(notdir $(C_SRCS)))
 
-OBJS += \
-./Bump.obj \
-./Clock.obj \
-./CortexM.obj \
-./FlashProgram.obj \
-./Lab10_Debugmain.obj \
-./LaunchPad.obj \
-./Reflectance.obj \
-./SysTickInts.obj \
-./startup_msp432p401r_ccs.obj \
-./system_msp432p401r.obj 
-
-OBJS__QUOTED += \
-"Bump.obj" \
-"Clock.obj" \
-"CortexM.obj" \
-"FlashProgram.obj" \
-"Lab10_Debugmain.obj" \
-"LaunchPad.obj" \
-"Reflectance.obj" \
-"SysTickInts.obj" \
-"startup_msp432p401r_ccs.obj" \
-"system_msp432p401r.obj" 
-
-C_DEPS__QUOTED += \
-"Bump.d" \
-"Clock.d" \
-"CortexM.d" \
-"FlashProgram.d" \
-"Lab10_Debugmain.d" \
-"LaunchPad.d" \
-"Reflectance.d" \
-"SysTickInts.d" \
-"startup_msp432p401r_ccs.d" \
-"system_msp432p401r.d" 
-
-C_SRCS__QUOTED += \
-"../inc/Bump.c" \
-"../inc/Clock.c" \
-"../inc/CortexM.c" \
-"../inc/FlashProgram.c" \
-"../Lab10_Debugmain.c" \
-"../inc/LaunchPad.c" \
-"../inc/Reflectance.c" \
-"../inc/SysTickInts.c" \
-"../startup_msp432p401r_ccs.c" \
-"../system_msp432p401r.c" 
-
-
+OBJS += $(patsubst %.d,%.obj,$(C_DEPS))
