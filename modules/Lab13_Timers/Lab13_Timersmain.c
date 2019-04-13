@@ -82,7 +82,7 @@ void TimedPause(uint32_t time){
 int Program13_1(void){
   Clock_Init48MHz();
   LaunchPad_Init(); // built-in switches and LEDs
-  Bump_Init();      // bump switches
+  //Bump_Init();      // bump switches
   Motor_Init();     // your function
   while(1){
     TimedPause(4000);
@@ -106,6 +106,7 @@ void Task(void){
   Time = Time + 1;
   REDLED ^= 0x01;       // toggle P2.0
 }
+
 int Program13_2(void){
   Clock_Init48MHz();
   LaunchPad_Init();  // built-in switches and LEDs

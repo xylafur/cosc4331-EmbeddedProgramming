@@ -59,6 +59,8 @@ policies, either expressed or implied, of the FreeBSD Project.
 #include "../inc/CortexM.h"
 #include "../inc/PWM.h"
 
+#include "../inc/MotorUtil.h"
+
 // *******Lab 13 solution*******
 
 // ------------Motor_Init------------
@@ -71,8 +73,7 @@ policies, either expressed or implied, of the FreeBSD Project.
 // Input: none
 // Output: none
 void Motor_Init(void){
-  // write this as part of Lab 13
-  
+    INIT_MOTORS();
 }
 
 // ------------Motor_Stop------------

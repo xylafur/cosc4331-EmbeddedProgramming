@@ -59,24 +59,7 @@ policies, either expressed or implied, of the FreeBSD Project.
 #include "msp.h"
 #include "../inc/SysTick.h"
 #include "../inc/Bump.h"
-
-// After digging through the libs a bit, think this is where float is defined
-#include <math.h>
-
-// *******Lab 12 solution*******
-//
-#define MAKE_OUTPUT(PORT, PIN)  \
-    PORT->SEL0 &= ~(1 << PIN);  \
-    PORT->SEL1 &= ~(1 << PIN);  \
-    PORT->DIR |= (1 << PIN)
-
-#define HIGH(PORT, PIN) (PORT->OUT |= (1 << PIN))
-#define LOW(PORT, PIN) (PORT->OUT &= ~(1 << PIN))
-
-#define WHEELS_LEFT() RIGHT_WHEEL_FORWARD(); LEFT_WHEEL_BACKWARD()
-#define WHEELS_RIGHT()     RIGHT_WHEEL_BACKWARD(); LEFT_WHEEL_FORWARD()
-#define WHEELS_FORWARD()     RIGHT_WHEEL_FORWARD(); LEFT_WHEEL_FORWARD()
-#define WHEELS_BACKWARD()     RIGHT_WHEEL_BACKWARD(); LEFT_WHEEL_BACKWARD()
+#include "../inc/MotorUtil.h"
 
 
 void Motor_InitSimple(void){
@@ -119,19 +102,6 @@ void Motor_StopSimple(void){
 
 /*  I have these just because it makes everything seem less like magic
  */
-#define RIGHT_WHEEL_FORWARD() LOW(P1, 6)
-#define RIGHT_WHEEL_BACKWARD() HIGH(P1, 6)
-#define RIGHT_WHEEL_ON() HIGH(P2, 6)
-#define RIGHT_WHEEL_OFF() LOW(P2, 6)
-
-#define LEFT_WHEEL_FORWARD() HIGH(P1, 7)
-#define LEFT_WHEEL_BACKWARD() LOW(P1, 7)
-#define LEFT_WHEEL_ON() HIGH(P2, 7)
-#define LEFT_WHEEL_OFF() LOW(P2, 7)
-
-
-#define PERIOD_ms 10
-
 void PWM(uint16_t high_time_us, uint16_t period_ms){
     uint16_t low_time_us = period_ms * 1000 - high_time_us;
 
@@ -146,7 +116,6 @@ void PWM(uint16_t high_time_us, uint16_t period_ms){
     SysTick_Wait1us(low_time_us);
 }
 
-#define MAX(a, b) a > b ? a : b
 
 void independent_pwm(uint16_t right_high_us, uint16_t left_high_us,
                      uint16_t period_ms, uint16_t granularity_us){
