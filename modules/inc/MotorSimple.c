@@ -80,9 +80,9 @@ void Motor_InitSimple(void){
   uint8_t ii;
 
   for(ii = 0 ; ii < NUM_MOTORS ; ii++){
-    MAKE_OUTPUT(P1, pins[ii]);
-    MAKE_OUTPUT(P2, pins[ii]);
-    MAKE_OUTPUT(P3, pins[ii]);
+    MAKE_GPIO_OUTPUT(P1, pins[ii]);
+    MAKE_GPIO_OUTPUT(P2, pins[ii]);
+    MAKE_GPIO_OUTPUT(P3, pins[ii]);
   }
 
   LOW(P2, 6);

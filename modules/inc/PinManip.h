@@ -19,9 +19,23 @@
                                   PORT -> REN |= (1 << PIN);                \
                                   PORT -> OUT |= (1 << PIN)
 
-//TODO: Check that this is correct!!
+#define MK_TIMER0A_FUNCTION(PORT, PIN)  PORT -> SEL0 |=  (1 << PIN);        \
+                                        PORT -> SEL1 &= ~(1 << PIN)
+
+#define HIGH(PORT, PIN) (PORT->OUT |= (1 << PIN))
+#define LOW(PORT, PIN) (PORT->OUT &= ~(1 << PIN))
+
+#define MAKE_GPIO_OUTPUT(PORT, PIN) \
+    PORT->SEL0 &= ~(1 << PIN);      \
+    PORT->SEL1 &= ~(1 << PIN);      \
+    PORT->DIR |= (1 << PIN)
+
+#define MAKE_OUTPUT(PORT, PIN)  PORT->DIR |= (1 << PIN)
+
+
+
+
 #define OUTPUT  1
 #define INPUT   0
-
 
 #endif

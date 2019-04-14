@@ -79,7 +79,9 @@ void TimedPause(uint32_t time){
   while(LaunchPad_Input()==0);  // wait for touch
   while(LaunchPad_Input());     // wait for release
 }
-int Program13_1(void){
+
+int main(void){
+//int Program13_1(void){
   Clock_Init48MHz();
   LaunchPad_Init(); // built-in switches and LEDs
   //Bump_Init();      // bump switches
@@ -117,7 +119,7 @@ int Program13_2(void){
   }
 }
 
-int main(void){
+int notmain(void){
     // write a main program that uses PWM to move the robot
     // like Program13_1, but uses TimerA1 to periodically
     // check the bump switches, stopping the robot on a collision

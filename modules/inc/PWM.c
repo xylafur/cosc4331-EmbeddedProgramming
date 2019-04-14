@@ -49,6 +49,9 @@ policies, either expressed or implied, of the FreeBSD Project.
 */
 
 #include "msp.h"
+#include "TimerUtil.h"
+#include "PinManip.h"
+#include "PinMap.h"
 
 //***************************PWM_Init1*******************************
 // PWM outputs on P2.4
@@ -148,9 +151,28 @@ void PWM_Duty2(uint16_t duty2){
 // P2.7=1 when timer equals TA0CCR4 on way down, P2.7=0 when timer equals TA0CCR4 on way up
 // Period of P2.6 is period*1.333us, duty cycle is duty3/period
 // Period of P2.7 is period*1.333us, duty cycle is duty4/period
-void PWM_Init34(uint16_t period, uint16_t duty3, uint16_t duty4){
+void PWM_Init34(uint16_t period_cycles, uint16_t left_duty, uint16_t right_duty){
+  if(left_duty >= period_cycles || right_duty >= period_cycles ){
+      return;
+  }
 
-  // write this as part of Lab 13
+  MAKE_OUTPUT(RT_WHL_EN_PORT, RT_WHL_DIR_PIN);
+  MK_TIMER0A_FUNCTION(RT_WHL_EN_PORT, RT_WHL_DIR_PIN);
+
+  MAKE_OUTPUT(LF_WHL_EN_PORT, LF_WHL_DIR_PIN);
+  MK_TIMER0A_FUNCTION(LF_WHL_EN_PORT, LF_WHL_DIR_PIN);
+
+  TIMER_A0->CCTL[0] = TIMER_CCTL_TOGGLE;
+  TIMER_A0->CCR[0] = period_cycles;
+  TIMER_A0->EX0 = 0x0000;        //    divide by 1
+  TIMER_A0->CCTL[3] = TIMER_CCTL_TOGGLE_RESET;
+  TIMER_A0->CCR[3] = left_duty;
+  TIMER_A0->CCTL[4] = TIMER_CCTL_TOGGLE_RESET;
+  TIMER_A0->CCR[4] = right_duty;
+
+  TIMER_A0->CTL = TIMER_CTL_MASK(0x2, 0x3, 0x3, 0x0, 0x0, 0x0); // SMCLK=12MHz,
+                                                                // divide by 8
+                                                                // up-down mode
 }
 
 //***************************PWM_Duty3*******************************
@@ -158,18 +180,18 @@ void PWM_Init34(uint16_t period, uint16_t duty3, uint16_t duty4){
 // Inputs:  duty3
 // Outputs: none
 // period of P2.6 is 2*period*666.7ns, duty cycle is duty3/period
-void PWM_Duty3(uint16_t duty3){
-
-  // write this as part of Lab 13
+void PWM_Duty3(uint16_t left_duty){
+    if(left_duty > TIMER_A0->CCR[0]){return;}
+    TIMER_A0->CCR[3] = left_duty;
 }
 
 //***************************PWM_Duty4*******************************
 // change duty cycle of PWM output on P2.7
 // Inputs:  duty4
 // Outputs: none// period of P2.7 is 2*period*666.7ns, duty cycle is duty2/period
-void PWM_Duty4(uint16_t duty4){
-
-  // write this as part of Lab 13
+void PWM_Duty4(uint16_t right_duty){
+    if(right_duty > TIMER_A0->CCR[0]){return;}
+    TIMER_A0->CCR[4] = right_duty;
 }
 
 

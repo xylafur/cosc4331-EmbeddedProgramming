@@ -58,8 +58,10 @@ policies, either expressed or implied, of the FreeBSD Project.
 #include "msp.h"
 #include "../inc/CortexM.h"
 #include "../inc/PWM.h"
-
 #include "../inc/MotorUtil.h"
+
+#define PWM_PERIOD  15000
+#define MAX_DUTY    14998
 
 // *******Lab 13 solution*******
 
@@ -73,7 +75,11 @@ policies, either expressed or implied, of the FreeBSD Project.
 // Input: none
 // Output: none
 void Motor_Init(void){
-    INIT_MOTORS();
+    //Init the motors.  Init Enable pins as timer functionality
+    INIT_MOTORS(1);
+    PWM_Init34(PWM_PERIOD, PWM_PERIOD / 2, PWM_PERIOD / 2);
+    PWM_Duty3(0);
+    PWM_Duty4(0);
 }
 
 // ------------Motor_Stop------------
@@ -82,8 +88,8 @@ void Motor_Init(void){
 // Input: none
 // Output: none
 void Motor_Stop(void){
-  // write this as part of Lab 13
-  
+    PWM_Duty3(0);
+    PWM_Duty4(0); 
 }
 
 // ------------Motor_Forward------------
@@ -95,8 +101,13 @@ void Motor_Stop(void){
 // Output: none
 // Assumes: Motor_Init() has been called
 void Motor_Forward(uint16_t leftDuty, uint16_t rightDuty){ 
-  // write this as part of Lab 13
-  
+    if(leftDuty > MAX_DUTY || rightDuty > MAX_DUTY){
+        return;
+    }
+
+    WHEELS_FORWARD();
+    PWM_Duty3(leftDuty);
+    PWM_Duty4(rightDuty);
 }
 
 // ------------Motor_Right------------
@@ -108,8 +119,9 @@ void Motor_Forward(uint16_t leftDuty, uint16_t rightDuty){
 // Output: none
 // Assumes: Motor_Init() has been called
 void Motor_Right(uint16_t leftDuty, uint16_t rightDuty){ 
-  // write this as part of Lab 13
-
+    WHEELS_RIGHT();
+    PWM_Duty3(leftDuty);
+    PWM_Duty4(rightDuty);
 }
 
 // ------------Motor_Left------------
@@ -121,8 +133,9 @@ void Motor_Right(uint16_t leftDuty, uint16_t rightDuty){
 // Output: none
 // Assumes: Motor_Init() has been called
 void Motor_Left(uint16_t leftDuty, uint16_t rightDuty){ 
-  // write this as part of Lab 13
-
+    WHEELS_LEFT();
+    PWM_Duty3(leftDuty);
+    PWM_Duty4(rightDuty);
 }
 
 // ------------Motor_Backward------------
@@ -134,6 +147,7 @@ void Motor_Left(uint16_t leftDuty, uint16_t rightDuty){
 // Output: none
 // Assumes: Motor_Init() has been called
 void Motor_Backward(uint16_t leftDuty, uint16_t rightDuty){ 
-  // write this as part of Lab 13
-
+    WHEELS_BACKWARD();
+    PWM_Duty3(leftDuty);
+    PWM_Duty4(rightDuty);
 }
