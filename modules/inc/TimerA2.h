@@ -51,8 +51,11 @@ policies, either expressed or implied, of the FreeBSD Project.
 #ifndef __TIMERA2INTS_H__ // do not include more than once
 #define __TIMERA2INTS_H__
 
-#define MS_TO_PERIOD(_ms) 
+#define A2_PERIOD_ns (1000000 / 2)
 
+//The A2 timer is set to have a period of 2micro seconds
+#define MS_TO_PERIOD(_ms) (_ms * A2_PERIOD_ns)
+#define MicroS_TO_PERIOD(_micros) (_micros / 2)
 
 /**
  * Activate Timer A2 interrupts to run user task periodically

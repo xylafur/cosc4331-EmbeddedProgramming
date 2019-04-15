@@ -60,6 +60,7 @@ policies, either expressed or implied, of the FreeBSD Project.
 #include <stdint.h>
 #include "msp432.h"
 #include "../inc/Clock.h"
+#include "../inc/LaunchPad.h"
 
 // ------------Reflectance_Init------------
 // Initialize the GPIO pins associated with the QTR-8RC
@@ -125,56 +126,7 @@ uint8_t Reflectance_Read(uint32_t sleep_time)
     return data;
 }
 
-// Color    LED(s) Port2
-// dark     ---    0
-// red      R--    0x01
-// green    -G-    0x02
-// yellow   RG-    0x03
-// blue     --B    0x04
-// pink     R-B    0x05
-// sky blue -GB    0x06
-// white    RGB    0x07
-void set_color(uint8_t sensor_data){
-    uint8_t led_color = 0;
 
-    if(sensor_data == 0xFF | sensor_data == 0x0){
-        led_color = 0;
-
-    }else{
-        if(sensor_data & 0x1){
-            led_color |= 0x1;
-
-        }if(sensor_data & 0x2){
-            led_color |= 0x2;
-
-        }if(sensor_data & 0x4){
-            led_color |= 0x4;
-
-        // At this point, there are no more possible color combinations..
-        }if(sensor_data & 0x8){
-            led_color |= 0x1;
-
-        }if(sensor_data & 0x10){
-            led_color |= 0x2;
-
-        }if(sensor_data & 0x20){
-            led_color |= 0x4;
-
-        //ran out of colors again
-        }if(sensor_data & 0x40){
-            led_color |= 0x1;
-
-        }if(sensor_data & 0x80){
-            led_color |= 0x2;
-        }
-    }
-
-    //The led's are the last 3 bits of P2, so P2.0, P2.1 and P2.2
-    P2->OUT = (P2->OUT & 0xF8) | led_color;
-
-
-
-}
 
 void LineSensorTest(uint32_t time){
     uint8_t sensor_data = Reflectance_Read(time);

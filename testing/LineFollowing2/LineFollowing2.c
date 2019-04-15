@@ -57,15 +57,12 @@ policies, either expressed or implied, of the FreeBSD Project.
 #include <stdint.h>
 #include "msp.h"
 
-#include "../inc/Reflectance.h"
+#include "../inc/LineInt.h"
 #include "../inc/Clock.h"
 #include "../inc/TExaS.h"
 #include "../inc/LaunchPad.h"
 #include "../inc/FSM.h"
 #include "../inc/Motor.h"
-
-
-
 
 /*  This is for me to test our sensor a bit
  */
@@ -73,17 +70,19 @@ int main(){
     Clock_Init48MHz();
     LaunchPad_Init();
 
-    Motor_Init();
+    //Motor_Init();
+    LineSensorIntInit();
 
     //Initialize Line Sensor
     //Register callback interrupt for sensor
     //
     //Enable Interrupts
 
-
-    enum Edges this_edge;
-    State_t *current_state = get_starting_state();
+    //enum Edges this_edge;
+    //State_t *current_state = get_starting_state();
+    EnableInterrupts();
 
     while(1){
+        set_color(LineSensorData);
     }
 }

@@ -52,18 +52,16 @@ void (*TimerA2Task)(void);   // user function
 // Activate Timer A2 interrupts to run user task periodically
 // Inputs:  task is a pointer to a user function
 //          period in units (24/SMCLK), 16 bits
+//
+//          Period is in units of 2 micro seconds
 // Outputs: none
 void TimerA2_Init(void(*task)(void), uint16_t period){
   TimerA2Task = task;             // user function
   TIMER_A2->CTL &= ~0x0030;       // halt Timer A2
-  // bits15-10=XXXXXX, reserved
-  // bits9-8=10,       clock source to SMCLK
-  // bits7-6=10,       input clock divider /4
-  // bits5-4=00,       stop mode
-  // bit3=X,           reserved
-  // bit2=0,           set this bit to clear
-  // bit1=0,           no interrupt on timer
-  TIMER_A2->CTL = 0x0280;
+
+  TIMER_A2->CTL = TIMER_CTL_MASK(SMCLK, PRESCALE_FOUR, MODE_STOP, TA_NO_CLR,
+                                 TA_INT_NO_EN, 0x0);
+
   // bits15-14=00,     no capture mode
   // bits13-12=XX,     capture/compare input select
   // bit11=X,          synchronize capture source
@@ -76,8 +74,11 @@ void TimerA2_Init(void(*task)(void), uint16_t period){
   // bit2=0,           output this value in output mode 0
   // bit1=X,           capture overflow status
   // bit0=0,           clear capture/compare interrupt pending
-  TIMER_A2->CCTL[0] = 0x0010;
+  TIMER_A2->CCTL[0] = TIMER_CCTL_MASK(0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+                                      0x1, 0x0, 0x0, 0x0, 0x0);
+
   TIMER_A2->CCR[0] = (period - 1);   // compare match value
+
   TIMER_A2->EX0 = 0x0005;    // configure for input clock divider /6
 // interrupts enabled in the main program after all devices initialized
   NVIC->IP[3] = (NVIC->IP[3]&0xFFFFFF00)|0x00000040; // priority 2
