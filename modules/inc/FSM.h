@@ -6,6 +6,12 @@
 #define AVG(a, b) ((a + b)/2)
 #define BETWEEN(pos, max, min) (pos > min && pos < max)
 
+/*  This way even though I will be changing the State Machine significantly, my
+ *  old implementation (which works, just not that well and doesn't use
+ *  interrupts) can still be compiled
+ */
+#ifdef LineFollowing1
+
 /*  These represent all of the possible states of our Finite State Machine
  */
 #define NUM_STATES 8
@@ -63,5 +69,9 @@ State_t * get_starting_state();
 
 void drive_motor(enum State_e this_state);
 enum Edges edge_encoder(int32_t pos);
+
+#else
+
+#endif
 
 #endif

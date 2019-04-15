@@ -51,6 +51,8 @@ policies, either expressed or implied, of the FreeBSD Project.
 #ifndef __TIMERA2INTS_H__ // do not include more than once
 #define __TIMERA2INTS_H__
 
+#define MS_TO_PERIOD(_ms) 
+
 
 /**
  * Activate Timer A2 interrupts to run user task periodically
@@ -63,6 +65,8 @@ policies, either expressed or implied, of the FreeBSD Project.
  * @brief Initialize Timer A2
  */
 void TimerA2_Init(void(*task)(void), uint16_t period);
+
+void TimerA2_Change_Task(void(*task)(void), uint16_t period);
 
 /**
  * Deactivate the interrupt running a user task periodically.

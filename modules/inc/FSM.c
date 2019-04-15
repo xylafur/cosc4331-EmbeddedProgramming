@@ -2,6 +2,12 @@
 #include "../inc/MotorSimple.h"
 #include "../inc/Reflectance.h"
 
+/*  This way even though I will be changing the State Machine significantly, my
+ *  old implementation (which works, just not that well and doesn't use
+ *  interrupts) can still be compiled
+ */
+#ifdef LineFollowing1
+
 #define OffLeft &fsm[0]
 #define FarLeft &fsm[1]
 #define Left &fsm[2]
@@ -33,6 +39,7 @@ State_t fsm [NUM_STATES] = {
 State_t * get_starting_state(){
     return &fsm[3];
 }
+
 
 uint8_t ramped = 0;
 uint8_t backwards_ramped = 0;
@@ -138,4 +145,7 @@ enum Edges edge_encoder(int32_t pos){
     }
 }
 
+#else
+
+#endif
 

@@ -15,7 +15,7 @@ ORDERED_OBJS += \
 "./FSM.obj" \
 "./MotorSimple.obj" \
 "./TExaS.obj" \
-"./LineFollowing1.obj" \
+"./LineFollowing2.obj" \
 "./startup_msp432p401r_ccs.obj" \
 "./system_msp432p401r.obj" \
 "../msp432p401r.cmd" \
@@ -126,9 +126,9 @@ endif
 -include ../makefile.defs
 
 # Add inputs and outputs from these tool invocations to the build variables 
-EXE_OUTPUTS = LineFollowing1.out
+EXE_OUTPUTS = LineFollowing2.out
 
-BIN_OUTPUTS = LineFollowing1.hex
+BIN_OUTPUTS = LineFollowing2.hex
 
 
 # All Target
@@ -139,14 +139,14 @@ all: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 $(EXE_OUTPUTS): $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: MSP432 Linker'
-	"/opt/ccstudio/ccsv8/tools/compiler/ti-cgt-arm_18.1.4.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --advice:power=all --define=__MSP432P401R__ --define=TARGET_IS_MSP432P4XX --define=ccs -g --c99 --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi -z -m"LineFollowing1.map" --heap_size=1024 --stack_size=512 -i"/opt/ccstudio/ccsv8/ccs_base/arm/include" -i"/opt/ccstudio/ccsv8/tools/compiler/ti-cgt-arm_18.1.4.LTS/lib" -i"/opt/ccstudio/ccsv8/tools/compiler/ti-cgt-arm_18.1.4.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="LineFollowing1_linkInfo.xml" --rom_model -o "LineFollowing1.out" $(ORDERED_OBJS)
+	"/opt/ccstudio/ccsv8/tools/compiler/ti-cgt-arm_18.1.4.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --advice:power=all --define=__MSP432P401R__ --define=TARGET_IS_MSP432P4XX --define=ccs -g --c99 --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi -z -m"LineFollowing2.map" --heap_size=1024 --stack_size=512 -i"/opt/ccstudio/ccsv8/ccs_base/arm/include" -i"/opt/ccstudio/ccsv8/tools/compiler/ti-cgt-arm_18.1.4.LTS/lib" -i"/opt/ccstudio/ccsv8/tools/compiler/ti-cgt-arm_18.1.4.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="LineFollowing2_linkInfo.xml" --rom_model -o "LineFollowing2.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
 $(BIN_OUTPUTS): $(EXE_OUTPUTS)
 	@echo 'Building files: $(strip $(EXE_OUTPUTS))'
 	@echo 'Invoking: MSP432 Hex Utility'
-	"/opt/ccstudio/ccsv8/tools/compiler/ti-cgt-arm_18.1.4.LTS/bin/armhex" --memwidth=8 --romwidth=8 -o "LineFollowing1.hex" $(EXE_OUTPUTS)
+	"/opt/ccstudio/ccsv8/tools/compiler/ti-cgt-arm_18.1.4.LTS/bin/armhex" --memwidth=8 --romwidth=8 -o "LineFollowing2.hex" $(EXE_OUTPUTS)
 	@echo 'Finished building: $(strip $(EXE_OUTPUTS))'
 	@echo ' '
 

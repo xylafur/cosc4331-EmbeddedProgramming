@@ -85,6 +85,19 @@ void TimerA2_Init(void(*task)(void), uint16_t period){
   TIMER_A2->CTL |= 0x0014;      // reset and start Timer A2 in up mode
 }
 
+void TimerA2_Change_Task(void(*task)(void), uint16_t period){
+    sr = StartCritical();
+
+    //set new task
+    TimerA2Task = task;
+    //set new period
+    TIMER_A2->CCR[0] = (preiod - 1);
+    //Restart the timer from 0 and make sure its counting up
+    TIMER_A2->CTL |= 0x0014;
+
+    EndCritical(sr);
+}
+
 
 // ------------TimerA2_Stop------------
 // Deactivate the interrupt running a user task periodically.
