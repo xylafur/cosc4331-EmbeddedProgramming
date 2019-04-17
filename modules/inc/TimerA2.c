@@ -43,6 +43,7 @@ policies, either expressed or implied, of the FreeBSD Project.
 */
 
 #include <stdint.h>
+#include "TimerUtil.h"
 #include "msp.h"
 
 
@@ -74,7 +75,7 @@ void TimerA2_Init(void(*task)(void), uint16_t period){
   // bit2=0,           output this value in output mode 0
   // bit1=X,           capture overflow status
   // bit0=0,           clear capture/compare interrupt pending
-  TIMER_A2->CCTL[0] = TIMER_CCTL_MASK(0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+  TIMER_A2->CCTL[0] = TIMER_CCTL_MASK(0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
                                       0x1, 0x0, 0x0, 0x0, 0x0);
 
   TIMER_A2->CCR[0] = (period - 1);   // compare match value
@@ -87,16 +88,12 @@ void TimerA2_Init(void(*task)(void), uint16_t period){
 }
 
 void TimerA2_Change_Task(void(*task)(void), uint16_t period){
-    sr = StartCritical();
-
     //set new task
     TimerA2Task = task;
     //set new period
-    TIMER_A2->CCR[0] = (preiod - 1);
+    TIMER_A2->CCR[0] = (period - 1);
     //Restart the timer from 0 and make sure its counting up
     TIMER_A2->CTL |= 0x0014;
-
-    EndCritical(sr);
 }
 
 

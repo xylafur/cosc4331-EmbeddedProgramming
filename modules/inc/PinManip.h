@@ -25,12 +25,23 @@
 #define HIGH(PORT, PIN) (PORT->OUT |= (1 << PIN))
 #define LOW(PORT, PIN) (PORT->OUT &= ~(1 << PIN))
 
+#define MAKE_PORT_GPIO(PORT) PORT->SEL0 = 0; PORT->SEL1 = 0
+
 #define MAKE_GPIO_OUTPUT(PORT, PIN) \
     PORT->SEL0 &= ~(1 << PIN);      \
     PORT->SEL1 &= ~(1 << PIN);      \
     PORT->DIR |= (1 << PIN)
 
+#define MAKE_PORT_OUTPUT(PORT) PORT->DIR = 0xFF
+#define MAKE_PORT_INPUT(PORT) PORT->DIR = 0
+
+#define WRITE_ONES_PORT(PORT) PORT->OUT = 0xFF
+
 #define MAKE_OUTPUT(PORT, PIN)  PORT->DIR |= (1 << PIN)
+
+#define READ_PORT(PORT) PORT->IN
+
+
 
 
 

@@ -63,7 +63,7 @@ void EnableInterrupts(void){
 // make a copy of previous I bit, disable interrupts
 // inputs:  none
 // outputs: previous I bit
-void StartCritical(void){
+long StartCritical(void){
   __asm  ("    MRS    R0, PRIMASK   ; save old status \n"
           "    CPSID  I             ; mask all (except faults)\n"
           "    BX     LR\n");
@@ -73,7 +73,7 @@ void StartCritical(void){
 // using the copy of previous I bit, restore I bit to previous value
 // inputs:  previous I bit
 // outputs: none
-void EndCritical(void){
+void EndCritical(long sr){
   __asm  ("    MSR    PRIMASK, R0\n"
           "    BX     LR\n");
 }

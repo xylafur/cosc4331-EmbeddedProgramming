@@ -89,6 +89,13 @@ policies, either expressed or implied, of the FreeBSD Project.
 
 
 
+/*  Global position variable that the Line sensor background task will update
+ *  The main loop will then use this value to update the state machine and the
+ *  duty cycle of the wheels
+ */
+int32_t position; // 332 is right, and -332 is left of center
+
+
 /**
  * Initialize the GPIO pins associated with the QTR-8RC.
  * One output to IR LED, 8 inputs from the sensor array.

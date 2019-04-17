@@ -70,6 +70,48 @@ void LaunchPad_Init(void){
   P2->OUT &= ~0x07;     //    all LEDs off
 }
 
+void set_color(uint8_t sensor_data){
+    uint8_t led_color = 0;
+
+    if(sensor_data == 0xFF | sensor_data == 0x0){
+        led_color = 0;
+
+    }else{
+        if(sensor_data & 0x1){
+            led_color |= 0x1;
+
+        }if(sensor_data & 0x2){
+            led_color |= 0x2;
+
+        }if(sensor_data & 0x4){
+            led_color |= 0x4;
+
+        // At this point, there are no more possible color combinations..
+        }if(sensor_data & 0x8){
+            led_color |= 0x1;
+
+        }if(sensor_data & 0x10){
+            led_color |= 0x2;
+
+        }if(sensor_data & 0x20){
+            led_color |= 0x4;
+
+        //ran out of colors again
+        }if(sensor_data & 0x40){
+            led_color |= 0x1;
+
+        }if(sensor_data & 0x80){
+            led_color |= 0x2;
+        }
+    }
+
+    //The led's are the last 3 bits of P2, so P2.0, P2.1 and P2.2
+    P2->OUT = (P2->OUT & 0xF8) | led_color;
+
+
+
+}
+
 //------------LaunchPad_Input------------
 // Input from Switches 
 // Input: none

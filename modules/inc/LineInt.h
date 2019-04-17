@@ -1,7 +1,6 @@
 #ifndef LINE_INT_HEADER
 #define LINE_INT_HEADER
 
-uint8_t LineSensorData = 0;
 
 /*  Function that will initialize all of the pins for the Line Sensor then sets
  *  the TimerA2 to trigger LineSensorIntStart after LINE_SENSOR_PAUSE_MILI_SECONDS

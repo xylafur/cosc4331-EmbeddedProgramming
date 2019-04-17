@@ -13,6 +13,7 @@ $(INC_DIR)/Clock.c \
 $(INC_DIR)/SysTick.c \
 $(INC_DIR)/LaunchPad.c \
 $(INC_DIR)/Reflectance.c \
+$(INC_DIR)/CortexM.c \
 $(INC_DIR)/LineInt.c \
 $(INC_DIR)/TimerA2.c \
 $(INC_DIR)/TimerA0.c \

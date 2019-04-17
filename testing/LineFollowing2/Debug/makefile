@@ -12,8 +12,12 @@ ORDERED_OBJS += \
 "./SysTick.obj" \
 "./LaunchPad.obj" \
 "./Reflectance.obj" \
+"./Motor.obj" \
 "./FSM.obj" \
-"./MotorSimple.obj" \
+"./CortexM.obj" \
+"./LineInt.obj"\
+"./TimerA0.obj" \
+"./TimerA2.obj" \
 "./TExaS.obj" \
 "./LineFollowing2.obj" \
 "./startup_msp432p401r_ccs.obj" \
@@ -21,6 +25,8 @@ ORDERED_OBJS += \
 "../msp432p401r.cmd" \
 $(GEN_CMDS__FLAG) \
 -llibc.a \
+
+#"./MotorSimple.obj" \
 
 -include ../makefile.init
 

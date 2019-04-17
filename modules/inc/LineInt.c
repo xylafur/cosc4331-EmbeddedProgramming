@@ -1,7 +1,14 @@
 #include <stdint.h>
 #include "msp432.h"
+
+#include "PinMap.h"
+#include "PinManip.h"
+
+#include "TimerUtil.h"
 #include "TimerA2.h"
-#include "CortexM.c"
+#include "CortexM.h"
+
+#include "LineInt.h"
 
 
 /*  This module assumes that SM has already be initialized to 12 MHz
@@ -11,15 +18,19 @@
 #define CAP_CHARGE_TIME_MICRO_SECONDS 10
 #define CAP_DISCHARGE_TIME_MICRO_SECONDS 1000
 
+uint8_t LineSensorData = 0;
 
 void LineSensorIntStart(void){
     long sr = StartCritical();
 
-    P5->OUT |= (1 << 3);
+    //Turn on the line sensor LED
+    HIGH(LINE_SENSOR_LED_PORT, LINE_SENSOR_LED_PIN);
 
-    P7->DIR = 0xFF;
-    P7->OUT = 0xFF;
+    //Start charging the Capacitors on the line sensor
+    MAKE_PORT_OUTPUT(LINE_SENSOR_SENSORS_PORT); 
+    WRITE_ONES_PORT(LINE_SENSOR_SENSORS_PORT);
 
+    //Run the next interrupt when the caps are done charging
     TimerA2_Change_Task(LineSensorIntMiddle,
                         MicroS_TO_PERIOD(CAP_CHARGE_TIME_MICRO_SECONDS));
     EndCritical(sr);
@@ -28,7 +39,8 @@ void LineSensorIntStart(void){
 void LineSensorIntMiddle(void){
     long sr = StartCritical();
 
-    P7->DIR = 0;
+    MAKE_PORT_INPUT(LINE_SENSOR_SENSORS_PORT);
+
     TimerA2_Change_Task(LineSensorIntEnd,
                         MicroS_TO_PERIOD(CAP_DISCHARGE_TIME_MICRO_SECONDS));
     EndCritical(sr);
@@ -37,8 +49,10 @@ void LineSensorIntMiddle(void){
 void LineSensorIntEnd(void){
     long sr = StartCritical();
 
-    LineSensorData = P7->IN;
-    P5->OUT &= ~(1 << 3);
+    LineSensorData = READ_PORT(LINE_SENSOR_SENSORS_PORT);
+    
+    //turn off the IR LED
+    LOW(LINE_SENSOR_LED_PORT, LINE_SENSOR_LED_PIN);
 
     EndCritical(sr);
 
@@ -48,16 +62,10 @@ void LineSensorIntEnd(void){
 
 
 void LineSensorIntInit(void){
-    // write this as part of Lab 6
-    P5->SEL0 &= ~(1 << 3);
-    P5->SEL1 &= ~(1 << 3);
-
-    //Make the IR led output
-    P5->DIR |= (1 << 3);
-
-    //Set all pins on port 7 low
-    P7->SEL0 = 0;
-    P7->SEL1 = 0;
+    //we will  be tunring this LED on and off
+    MAKE_GPIO_OUTPUT(LINE_SENSOR_LED_PORT, LINE_SENSOR_LED_PIN);
+    //we will be both reading and writing to / from this port;
+    MAKE_PORT_GPIO(LINE_SENSOR_SENSORS_PORT);
 
     TimerA2_Init(LineSensorIntStart,
                  MS_TO_PERIOD(LINE_SENSOR_PAUSE_MILI_SECONDS));

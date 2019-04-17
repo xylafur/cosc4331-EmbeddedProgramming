@@ -58,7 +58,7 @@ enum MODE_CONTROL {
     MODE_UP,            //TImer counts up to TAxCCR0
     MODE_CONTINUOUS,    //Timer counts up to 0xFFFF
     MODE_UP_DOWN        //Timer counts up to TAxCCR0 then down to 0x0000
-}:
+};
 
 enum TA_CLR_BIT {
     TA_NO_CLR,
@@ -78,7 +78,7 @@ enum TA_I_E {
 #define TIMER_CCTL_TOGGLE 0x80
 #define TIMER_CCTL_TOGGLE_RESET 0x40
 
-#define TIMER_CCTL_MASK(CM, CCIS, SCS, SCCI, CAP, OUTMOD, CCIE, CCI, OUT, COV)\
+#define TIMER_CCTL_MASK(CM, CCIS, SCS, SCCI, CAP, OUTMOD, CCIE, CCI, OUT, COV, CCIFG)\
     (((CM & 0x3) << 14) | ((CCIS & 0x3) << 12) | ((SCS & 1) << 11) |        \
      ((SCCI & 1) << 10) | ((CAP & 1) << 8) | ((OUTMOD & 0x7) << 5) |        \
      ((CCIE & 0x1) << 4) | ((CCI & 1) << 3) | ((OUT & 0x1) << 2) |          \
