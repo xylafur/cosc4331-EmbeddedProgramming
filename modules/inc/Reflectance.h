@@ -75,6 +75,8 @@ policies, either expressed or implied, of the FreeBSD Project.
 #ifndef REFLECTANCE_H_
 #define REFLECTANCE_H_
 
+#include <stdint.h>
+
 
 /*  Color combinations for the internal LEDs
  */

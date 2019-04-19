@@ -1,5 +1,31 @@
-#include "../inc/FSM.h"
-#include "../inc/MotorSimple.h"
+/*  Simplified BSD License (FreeBSD License)
+    Copyright (c) 2017, James Richardson, All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without modification,
+    are permitted provided that the following conditions are met:
+
+    1. Redistributions of source code must retain the above copyright notice,
+       this list of conditions and the following disclaimer.
+    2. Redistributions in binary form must reproduce the above copyright notice,
+       this list of conditions and the following disclaimer in the documentation
+       and/or other materials provided with the distribution.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+    DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+    LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
+    AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+    OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+    USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+    The views and conclusions contained in the software and documentation are
+    those of the authors and should not be interpreted as representing official
+    policies, either expressed or implied, of the FreeBSD Project.
+*/
+
 #include "../inc/Reflectance.h"
 
 /*  This way even though I will be changing the State Machine significantly, my
@@ -7,6 +33,9 @@
  *  interrupts) can still be compiled
  */
 #ifdef LineFollowing1
+
+#include "../inc/MotorSimple.h"
+#include "../inc/FSM.h"
 
 #define OffLeft &fsm[0]
 #define FarLeft &fsm[1]
@@ -147,5 +176,73 @@ enum Edges edge_encoder(int32_t pos){
 
 #else
 
+#define LINEFOLLOWING2
+#include "../inc/FSM.h"
+
+enum Edges_e get_edge(int32_t pos){
+    if(pos == 0){
+        return OFF_EDGE;
+    }
+
+    //Kind of arbitrary groupings..
+    if(pos <= 333 && pos  >= 200) {
+        return FAR_RIGHT_EDGE;
+    }
+    if(pos < 200 && pos >= 100){
+        return RIGHT_EDGE;
+    }
+    if(pos < 100 && pos >= 3){
+        return SLIGHTLY_RIGHT_EDGE;
+    }
+    if(pos < 3 && pos >= -2){
+        return CENTER_EDGE;
+    }
+    if(pos < -3 && pos >= -100){
+        return SLIGHTLY_LEFT_EDGE;
+    }
+    if(pos < -100 && pos >= -200){
+        return LEFT_EDGE;
+    }
+    if(pos < -200 && pos >= -333){
+        return FAR_LEFT_EDGE;
+    }
+
+    return OFF_EDGE;
+}
+
+#define FORWARD     1
+#define BACKWARD    0
+
+State_t fsm [NUM_STATES] = {
+    //State                Lost Line Transition    LeftDuty LeftDirection  RightDuty  RightDirection
+    {OFF_LEFT_STATE,       OFF_LEFT_STATE,         20,      BACKWARD,      70,        FORWARD},
+    {FAR_LEFT_STATE,       OFF_LEFT_STATE,         40,      FORWARD,       70,        FORWARD},
+    {LEFT_STATE,           OFF_LEFT_STATE,         40,      FORWARD,       60,        FORWARD},
+    {SLIGHTLY_LEFT_STATE,  CENTER_BACKWARD_STATE,  50,      FORWARD,       60,        FORWARD},
+
+    {CENTER_FORWARD_STATE, CENTER_BACKWARD_STATE,  60,         FORWARD,        60,         FORWARD},
+    {CENTER_BACKWARD_STATE,CENTER_BACKWARD_STATE,  60,         BACKWARD,        60,        BACKWARD},
+
+    {SLIGHTLY_RIGHT_STATE, CENTER_BACKWARD_STATE,  50,         FORWARD,        60,         FORWARD},
+    {RIGHT_STATE,          OFF_RIGHT_STATE,        60,         FORWARD,        50,         FORWARD},
+    {FAR_RIGHT_STATE,      OFF_RIGHT_STATE,        70,         FORWARD,        40,         FORWARD},
+    {OFF_LEFT_STATE,       OFF_RIGHT_STATE,        70,         FORWARD,        20,         BACKWARD}
+};
+
+enum State_e TRANSITION_MAPPING [NUM_EDGES] = {
+    FAR_LEFT_STATE,
+    LEFT_STATE,
+    SLIGHTLY_LEFT_STATE,
+
+    CENTER_FORWARD_STATE,
+
+    SLIGHTLY_RIGHT_STATE,
+    RIGHT_STATE,
+    FAR_RIGHT_STATE
+};
+
+State_t * get_starting_state(){
+    return &fsm[4];
+}
 #endif
 

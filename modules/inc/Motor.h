@@ -137,4 +137,7 @@ void Motor_Left(uint16_t leftDuty, uint16_t rightDuty);
  */
 void Motor_Backward(uint16_t leftDuty, uint16_t rightDuty);
 
+void Drive_Motors(uint16_t left_duty_percent, uint8_t left_direction,
+                  uint16_t right_duty_percent, uint8_t right_direction);
+
 #endif /* MOTOR_H_ */

@@ -14,11 +14,12 @@ $(INC_DIR)/SysTick.c \
 $(INC_DIR)/LaunchPad.c \
 $(INC_DIR)/Reflectance.c \
 $(INC_DIR)/CortexM.c \
+$(INC_DIR)/PWM.c \
+$(INC_DIR)/Motor.c \
 $(INC_DIR)/LineInt.c \
 $(INC_DIR)/TimerA2.c \
 $(INC_DIR)/TimerA0.c \
 $(INC_DIR)/FSM.c \
-$(INC_DIR)/Motor.c \
 $(INC_DIR)/TExaS.c \
 ../LineFollowing2.c \
 ../startup_msp432p401r_ccs.c \

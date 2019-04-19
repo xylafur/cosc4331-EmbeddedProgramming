@@ -78,9 +78,16 @@ void Motor_Init(void){
     //Init the motors.  Init Enable pins as timer functionality
     INIT_MOTORS(1);
     PWM_Init34(PWM_PERIOD, PWM_PERIOD / 2, PWM_PERIOD / 2);
+
+    LEFT_WHEEL_FORWARD();
+    RIGHT_WHEEL_FORWARD();
+
     PWM_Duty3(0);
     PWM_Duty4(0);
 }
+
+uint8_t CURRENT_RIGHT_WHEEL_DIRECTION = 1;
+uint8_t CURRENT_LEFT_WHEEL_DIRECTION = 1;
 
 // ------------Motor_Stop------------
 // Stop the motors, power down the drivers, and
@@ -150,4 +157,35 @@ void Motor_Backward(uint16_t leftDuty, uint16_t rightDuty){
     WHEELS_BACKWARD();
     PWM_Duty3(leftDuty);
     PWM_Duty4(rightDuty);
+}
+
+
+
+#define MAX_DUTY_TIME 14998
+#define PERCENT_TO_DUTY_TIME(percent) (uint16_t)(percent * MAX_DUTY_TIME / 100)
+void Drive_Motors(uint16_t left_duty_percent, uint8_t left_direction,
+                  uint16_t right_duty_percent, uint8_t right_direction){
+
+    if(left_direction != CURRENT_LEFT_WHEEL_DIRECTION){
+        CURRENT_LEFT_WHEEL_DIRECTION = left_direction;
+
+        if(left_direction){
+            LEFT_WHEEL_FORWARD();
+        }else{
+            LEFT_WHEEL_BACKWARD();
+        }
+    }
+
+    if(right_direction != CURRENT_RIGHT_WHEEL_DIRECTION){
+        CURRENT_RIGHT_WHEEL_DIRECTION = right_direction;
+
+        if(right_direction){
+            RIGHT_WHEEL_FORWARD();
+        }else{
+            RIGHT_WHEEL_BACKWARD();
+        }
+    }
+
+    PWM_Duty3(PERCENT_TO_DUTY_TIME(left_duty_percent));
+    PWM_Duty4(PERCENT_TO_DUTY_TIME(right_duty_percent));
 }

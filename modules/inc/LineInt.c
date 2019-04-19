@@ -4,12 +4,15 @@
 #include "PinMap.h"
 #include "PinManip.h"
 
+#include "Clock.h"
+
 #include "TimerUtil.h"
 #include "TimerA2.h"
 #include "CortexM.h"
 
 #include "LineInt.h"
 
+#include "../inc/LaunchPad.h"
 
 /*  This module assumes that SM has already be initialized to 12 MHz
  */
@@ -30,19 +33,13 @@ void LineSensorIntStart(void){
     MAKE_PORT_OUTPUT(LINE_SENSOR_SENSORS_PORT); 
     WRITE_ONES_PORT(LINE_SENSOR_SENSORS_PORT);
 
-    //Run the next interrupt when the caps are done charging
-    TimerA2_Change_Task(LineSensorIntMiddle,
-                        MicroS_TO_PERIOD(CAP_CHARGE_TIME_MICRO_SECONDS));
-    EndCritical(sr);
-}
-
-void LineSensorIntMiddle(void){
-    long sr = StartCritical();
+    Clock_Delay1us(CAP_CHARGE_TIME_MICRO_SECONDS);
 
     MAKE_PORT_INPUT(LINE_SENSOR_SENSORS_PORT);
 
     TimerA2_Change_Task(LineSensorIntEnd,
                         MicroS_TO_PERIOD(CAP_DISCHARGE_TIME_MICRO_SECONDS));
+ 
     EndCritical(sr);
 }
 

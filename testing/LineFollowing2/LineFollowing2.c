@@ -1,23 +1,5 @@
-    // Lab06_GPIOmain.c
-    // Runs on MSP432
-    // Solution to GPIO lab
-    // Daniel and Jonathan Valvano
-    // May 21, 2017
-    // Provide test main program for QTR-8RC reflectance sensor array
-    // Pololu part number 961.
-
-    /* This example accompanies the books
-       "Embedded Systems: Introduction to the MSP432 Microcontroller",
-           ISBN: 978-1512185676, Jonathan Valvano, copyright (c) 2017
-       "Embedded Systems: Real-Time Interfacing to the MSP432 Microcontroller",
-           ISBN: 978-1514676585, Jonathan Valvano, copyright (c) 2017
-       "Embedded Systems: Real-Time Operating Systems for ARM Cortex-M Microcontrollers",
-           ISBN: 978-1466468863, , Jonathan Valvano, copyright (c) 2017
-     For more information about my classes, my research, and my books, see
-     http://users.ece.utexas.edu/~valvano/
-
-    Simplified BSD License (FreeBSD License)
-    Copyright (c) 2017, Jonathan Valvano, All rights reserved.
+/*  Simplified BSD License (FreeBSD License)
+    Copyright (c) 2017, James Richardson, All rights reserved.
 
     Redistribution and use in source and binary forms, with or without modification,
     are permitted provided that the following conditions are met:
@@ -42,17 +24,7 @@
     The views and conclusions contained in the software and documentation are
     those of the authors and should not be interpreted as representing official
     policies, either expressed or implied, of the FreeBSD Project.
-    */
-
-    // reflectance LED illuminate connected to P5.3
-    // reflectance sensor 1 connected to P7.0 (robot's right, robot off road to left)
-    // reflectance sensor 2 connected to P7.1
-    // reflectance sensor 3 connected to P7.2
-    // reflectance sensor 4 connected to P7.3 center
-    // reflectance sensor 5 connected to P7.4 center
-    // reflectance sensor 6 connected to P7.5
-    // reflectance sensor 7 connected to P7.6
-    // reflectance sensor 8 connected to P7.7 (robot's left, robot off road to right)
+*/
 
 #include <stdint.h>
 #include "msp.h"
@@ -61,45 +33,63 @@
 #include "../inc/Clock.h"
 #include "../inc/TExaS.h"
 #include "../inc/LaunchPad.h"
+#include "../inc/Reflectance.h"
+
+#include "../inc/CortexM.h"
+
+//Just a temp hack until I get it passed in as a compile time flag
+#define LINEFOLLOWING2
 #include "../inc/FSM.h"
+#undef LINEFOLLOWING2
+
+
 #include "../inc/Motor.h"
 
 extern uint8_t LineSensorData;
-/*  This is for me to test our sensor a bit
- */
+extern State_t fsm [NUM_STATES];
+extern enum State_e TRANSITION_MAPPING [NUM_EDGES];
+
 int main(){
     Clock_Init48MHz();
-    LineSensorTest_Init();
     LaunchPad_Init();
 
-    set_color(0x1);
-    Clock_Delay1ms(1000);
+    DisableInterrupts();
 
-    //Motor_Init();
+    Motor_Init();
+    //Initialize Line Sensor and register callback functions
     LineSensorIntInit();
 
-    set_color(0x2);
-    Clock_Delay1ms(1000);
+    State_t *current_state = get_starting_state();
 
-    //Initialize Line Sensor
-    //Register callback interrupt for sensor
-    //
     //Enable Interrupts
-
-    //enum Edges this_edge;
-    //State_t *current_state = get_starting_state();
     EnableInterrupts();
 
-    set_color(0x4);
-    Clock_Delay1ms(1000);
-
     uint8_t i = 1;
+
+    uint8_t last_data_reading = 0;
+    uint32_t position;
+    uint8_t edge;
+
     while(1){
-        //set_color(LineSensorData);
-        set_color(i);
-        i = i<<1;
-        if(i == 0){
-            i = 1;
+        if(last_data_reading != LineSensorData){
+            last_data_reading = LineSensorData;
+
+            position = Reflectance_Position(LineSensorData);
+            edge = get_edge(position);
+
+            if(edge == OFF_EDGE){
+                current_state = &fsm[current_state->off_edge_transition];
+            }else{
+                current_state = &fsm[TRANSITION_MAPPING[edge]];
+            }
+
+
         }
+        Drive_Motors(current_state->left_duty, current_state->left_direction,
+                     current_state->right_duty, current_state->right_direction);
+
+        Clock_Delay1us(10);
+
+
     }
 }
