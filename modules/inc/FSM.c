@@ -213,20 +213,62 @@ enum Edges_e get_edge(int32_t pos){
 #define FORWARD     1
 #define BACKWARD    0
 
+
+uint8_t attempt_values [3][10][4] = {
+    {   {20, BACKWARD,  70, FORWARD}, {40, FORWARD,     70, FORWARD},
+        {40, FORWARD,   60, FORWARD}, {50, FORWARD,     60, FORWARD},
+        {60, FORWARD,   60, FORWARD}, {60, BACKWARD,    60, BACKWARD},
+        {50, FORWARD,   50, FORWARD}, {60, FORWARD,     50, FORWARD},
+        {70, FORWARD,   40, FORWARD}, {70, FORWARD,     20, BACKWARD}
+    },
+    {
+        {20, BACKWARD,  40, FORWARD}, {30, FORWARD,     60, FORWARD},
+        {30, FORWARD,   50, FORWARD}, {40, FORWARD,     50, FORWARD},
+        {50, FORWARD,   50, FORWARD}, {50, BACKWARD,    50, BACKWARD},
+        {50, FORWARD,   40, FORWARD}, {50, FORWARD,     30, FORWARD},
+        {60, FORWARD,   30, FORWARD}, {70, FORWARD,     20, BACKWARD}
+    },
+    {
+        {20, BACKWARD,  40, FORWARD}, {25, FORWARD,     50, FORWARD},
+        {25, FORWARD,   40, FORWARD}, {30, FORWARD,     35, FORWARD},
+        {50, FORWARD,   50, FORWARD}, {50, BACKWARD,    50, BACKWARD},
+        {35, FORWARD,   30, FORWARD}, {40, FORWARD,     25, FORWARD},
+        {50, FORWARD,   25, FORWARD}, {40, FORWARD,     20, BACKWARD}
+    },
+
+    /*  This one worked the best
+     */
+    {
+        {40, BACKWARD,  40, FORWARD}, {25, FORWARD,     45, FORWARD},
+        {27, FORWARD,   40, FORWARD}, {30, FORWARD,     35, FORWARD},
+        {50, FORWARD,   50, FORWARD}, {50, BACKWARD,    50, BACKWARD},
+        {35, FORWARD,   30, FORWARD}, {40, FORWARD,     27, FORWARD},
+        {45, FORWARD,   25, FORWARD}, {40, FORWARD,     40, BACKWARD}
+    },
+    {
+        {20, FORWARD,   60, FORWARD},   {20, BACKWARD,  35, FORWARD},
+        {25, FORWARD,   40, FORWARD},   {30, FORWARD,   35, FORWARD},
+        {50, FORWARD,   50, FORWARD},   {50, BACKWARD,  50, BACKWARD},
+        {35, FORWARD,   30, FORWARD},   {40, FORWARD,   27, FORWARD},
+        {20, FORWARD,   35, BACKWARD},  {60, FORWARD,   20, FORWARD}
+    }
+
+};
+
 State_t fsm [NUM_STATES] = {
     //State                Lost Line Transition    LeftDuty LeftDirection  RightDuty  RightDirection
-    {OFF_LEFT_STATE,       OFF_LEFT_STATE,         20,      BACKWARD,      70,        FORWARD},
-    {FAR_LEFT_STATE,       OFF_LEFT_STATE,         40,      FORWARD,       70,        FORWARD},
-    {LEFT_STATE,           OFF_LEFT_STATE,         40,      FORWARD,       60,        FORWARD},
-    {SLIGHTLY_LEFT_STATE,  CENTER_BACKWARD_STATE,  50,      FORWARD,       60,        FORWARD},
+    {OFF_LEFT_STATE,       OFF_LEFT_STATE,         40,      BACKWARD,      40,        FORWARD},
+    {FAR_LEFT_STATE,       OFF_LEFT_STATE,         25,      FORWARD,       45,        FORWARD},
+    {LEFT_STATE,           OFF_LEFT_STATE,         25,      FORWARD,       40,        FORWARD},
+    {SLIGHTLY_LEFT_STATE,  CENTER_BACKWARD_STATE,  30,      FORWARD,       35,        FORWARD},
 
-    {CENTER_FORWARD_STATE, CENTER_BACKWARD_STATE,  60,         FORWARD,        60,         FORWARD},
-    {CENTER_BACKWARD_STATE,CENTER_BACKWARD_STATE,  60,         BACKWARD,        60,        BACKWARD},
+    {CENTER_FORWARD_STATE, CENTER_BACKWARD_STATE,  50,         FORWARD,        50,         FORWARD},
+    {CENTER_BACKWARD_STATE,CENTER_BACKWARD_STATE,  50,         BACKWARD,        50,        BACKWARD},
 
-    {SLIGHTLY_RIGHT_STATE, CENTER_BACKWARD_STATE,  50,         FORWARD,        60,         FORWARD},
-    {RIGHT_STATE,          OFF_RIGHT_STATE,        60,         FORWARD,        50,         FORWARD},
-    {FAR_RIGHT_STATE,      OFF_RIGHT_STATE,        70,         FORWARD,        40,         FORWARD},
-    {OFF_LEFT_STATE,       OFF_RIGHT_STATE,        70,         FORWARD,        20,         BACKWARD}
+    {SLIGHTLY_RIGHT_STATE, CENTER_BACKWARD_STATE,  35,         FORWARD,        30,         FORWARD},
+    {RIGHT_STATE,          OFF_RIGHT_STATE,        40,         FORWARD,        27,         FORWARD},
+    {FAR_RIGHT_STATE,      OFF_RIGHT_STATE,        20,         FORWARD,        35,         FORWARD},
+    {OFF_RIGHT_STATE,       OFF_RIGHT_STATE,        40,         FORWARD,        40,         BACKWARD}
 };
 
 enum State_e TRANSITION_MAPPING [NUM_EDGES] = {

@@ -17,7 +17,7 @@
 /*  This module assumes that SM has already be initialized to 12 MHz
  */
 
-#define LINE_SENSOR_PAUSE_MILI_SECONDS 20
+#define LINE_SENSOR_PAUSE_MILI_SECONDS 10
 #define CAP_CHARGE_TIME_MICRO_SECONDS 10
 #define CAP_DISCHARGE_TIME_MICRO_SECONDS 1000
 
