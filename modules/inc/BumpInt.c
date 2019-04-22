@@ -52,31 +52,41 @@ policies, either expressed or implied, of the FreeBSD Project.
 
 #include <stdint.h>
 #include "msp.h"
-// Initialize Bump sensors
-// Make six Port 4 pins inputs
-// Activate interface pullup
-// pins 7,6,5,3,2,0
-// Interrupt on falling edge (on touch)
-void BumpInt_Init(void(*task)(uint8_t)){
-    // write this as part of Lab 14
 
-}
-// Read current state of 6 switches
-// Returns a 6-bit positive logic result (0 to 63)
-// bit 5 Bump5
-// bit 4 Bump4
-// bit 3 Bump3
-// bit 2 Bump2
-// bit 1 Bump1
-// bit 0 Bump0
-uint8_t Bump_Read(void){
-    // write this as part of Lab 14
+#include "PinMap.h"
+#include "PinManip.h"
 
-    return 0; // replace this line
+#define PRIORITY 0x40000000
+#define INTERRUPT_NUMBER (0x8 << 3)
+
+void (*bump_task)(void);
+
+
+void BumpInt_Init(void (*task)(void)){
+    MK_PORT_GPIO_PULLUP(BUMP_SENSOR_PORT);
+
+    FALLING_EDGE_TRIGGERED(BUMP_SENSOR_PORT);
+
+    //Clear out the interrupt flag just in case
+    BUMP_SENSOR_PORT->IFG = 0;
+
+    ENABLE_INTERRUPT(BUMP_SENSOR_PORT);
+
+    //Set the priority of this interrupt
+    //TODO: Put this in a header somewhere maybe?
+    NVIC->IP[INTERRUPT_NUMBER] = (NVIC->IP[INTERRUPT_NUMBER]&0xFFFFFF) | PRIORITY;
+
+    //Enable this particular interrupt
+    NVIC->ISER[1] = INTERRUPT_NUMBER;
+
+    bump_task = task;
 }
+
+
 // we do not care about critical section/race conditions
 // triggered on touch, falling edge
 void PORT4_IRQHandler(void){
-    // write this as part of Lab 14
+    BUMP_SENSOR_PORT->IFG = 0;
+    bump_task();
 }
 

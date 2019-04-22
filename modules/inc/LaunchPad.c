@@ -70,6 +70,10 @@ void LaunchPad_Init(void){
   P2->OUT &= ~0x07;     //    all LEDs off
 }
 
+void set_color_red(void){
+    P2->OUT = 0x1;
+}
+
 void set_color(uint8_t sensor_data){
     uint8_t led_color = 0;
 

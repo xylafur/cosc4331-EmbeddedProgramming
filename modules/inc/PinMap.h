@@ -33,4 +33,14 @@
 
 #define LINE_SENSOR_SENSORS_PORT P7
 
+/*  Relating to the bump sensor
+ */
+#define BUMP_SENSOR_PORT P4
+#define BUMP_SENSOR_0 0
+#define BUMP_SENSOR_1 1
+#define BUMP_SENSOR_2 2
+#define BUMP_SENSOR_3 3
+#define BUMP_SENSOR_4 4
+#define BUMP_SENSOR_5 5
+
 #endif

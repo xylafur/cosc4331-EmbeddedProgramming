@@ -89,6 +89,8 @@ void LaunchPad_Init(void);
 // white    RGB    0x07
 void set_color(uint8_t sensor_data);
 
+void set_color_red(void);
+
 /**
  * Input from two switches on LaunchPad
  * Value returned in postive logic
