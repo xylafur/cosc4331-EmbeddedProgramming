@@ -260,12 +260,12 @@ State_t fsm [NUM_STATES] = {
     {OFF_LEFT_STATE,        0x7,    OFF_LEFT_STATE,         60,      BACKWARD,       30,        FORWARD},
     {FAR_LEFT_STATE,        0x4,    OFF_LEFT_STATE,         65,      FORWARD,       40,        FORWARD},
     {LEFT_STATE,            0x2,    OFF_LEFT_STATE,         70,      FORWARD,       50,        FORWARD},
-    {SLIGHTLY_LEFT_STATE,   0x1,    CENTER_BACKWARD_STATE,  75,      FORWARD,       60,        FORWARD},
+    {SLIGHTLY_LEFT_STATE,   0x1,    CENTER_BACKWARD_STATE,  75,      FORWARD,       65,        FORWARD},
 
     {CENTER_FORWARD_STATE,  0x0,    CENTER_BACKWARD_STATE,  80,         FORWARD,        80,         FORWARD},
     {CENTER_BACKWARD_STATE, 0x0,    CENTER_BACKWARD_STATE,  80,         BACKWARD,        80,        BACKWARD},
 
-    {SLIGHTLY_RIGHT_STATE,  0x1,    CENTER_BACKWARD_STATE,  60,         FORWARD,        75,         FORWARD},
+    {SLIGHTLY_RIGHT_STATE,  0x1,    CENTER_BACKWARD_STATE,  65,         FORWARD,        75,         FORWARD},
     {RIGHT_STATE,           0x2,    OFF_RIGHT_STATE,        50,         FORWARD,        70,         FORWARD},
     {FAR_RIGHT_STATE,       0x4,    OFF_RIGHT_STATE,        40,         FORWARD,        65,         FORWARD},
     {OFF_RIGHT_STATE,       0x7,    OFF_RIGHT_STATE,        20,         FORWARD,        60,         BACKWARD}

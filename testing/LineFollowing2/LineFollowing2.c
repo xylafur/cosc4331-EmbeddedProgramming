@@ -50,6 +50,76 @@ extern uint8_t LineSensorData;
 extern State_t fsm [NUM_STATES];
 extern enum State_e TRANSITION_MAPPING [NUM_EDGES];
 
+
+uint16_t current_left_duty;
+uint16_t current_right_duty;
+
+uint8_t current_left_direction;
+uint8_t current_right_direction;
+
+
+uint8_t RAMP_COUNTER = 0;
+uint8_t RAMP_MOD = 10;
+uint8_t RAMP_VALUE = 1;
+
+
+//THis is not working very well.. It is actually causing the jerking to be
+//worse.. I wonder if it it because its being updated to frequently (every 10
+//microseconds as we have it in the main loop, if we did it  as in interrupt
+//triggered with about the same frequency as the motor if it would preform
+//better)
+void ramp_motors(uint16_t dest_left_duty, uint8_t dest_left_direction,
+                 uint16_t dest_right_duty, uint8_t dest_right_direction){
+
+    if(RAMP_COUNTER++ % RAMP_MOD != 0){
+        return;
+    }
+
+
+    //If we're already going in the right direction, we just want to ramp
+    //towards out goal duty
+    if(dest_left_direction == current_left_direction){
+        //if we're already there just break
+        if(current_left_duty != dest_left_duty){
+            current_left_duty = dest_left_duty > current_left_duty  ?
+                                current_left_duty + RAMP_VALUE      :
+                                current_left_duty - RAMP_VALUE;
+        }
+
+    }else{
+        //Only switch directions if we have ramped all the way down
+        //should never be less than 1, but just in case
+        if(current_left_duty <= 1){
+            current_left_duty = 1;
+            current_left_direction = dest_left_direction;
+        }else{
+            current_left_duty--;
+        }
+
+    }
+
+    if(dest_right_direction == current_right_direction){
+        if(current_right_duty != dest_right_duty){
+            current_right_duty = dest_right_duty > current_right_duty   ?
+                                 current_right_duty + RAMP_VALUE        :
+                                 current_right_duty - RAMP_VALUE;
+        }
+
+    }else{
+        //Only switch directions if we have ramped all the way down
+        //should never be less than 1, but just in case
+        if(current_right_duty <= 1){
+            current_right_duty = 1;
+            current_right_direction = dest_right_direction;
+        }else{
+            current_right_duty--;
+        }
+    }
+}
+
+
+
+
 int main(){
     Clock_Init48MHz();
     LaunchPad_Init();
@@ -62,9 +132,20 @@ int main(){
     //Initialize Line Sensor and register callback functions
     LineSensorIntInit();
 
-    State_t *current_state = get_starting_state();
 
-    //Enable Interrupts
+    /*  Set up the enviornment based on the starting state
+     */
+    State_t *current_state = get_starting_state();
+    //Set the inital duty based on the desired value of the left and right
+    current_left_duty = current_state->left_duty;
+    current_right_duty = current_state->right_duty;
+    //Same thing but for the direction of the wheels
+    current_left_direction = current_state->left_direction;
+    current_right_direction = current_state->right_direction;
+
+
+
+    //Everything should be all setup now, lets enable interrupts
     EnableInterrupts();
 
     uint8_t i = 1;
@@ -74,6 +155,7 @@ int main(){
     uint8_t edge;
 
     while(1){
+        //We need to change state
         if(last_data_reading != LineSensorData){
             last_data_reading = LineSensorData;
 
@@ -85,18 +167,22 @@ int main(){
             }else{
                 current_state = &fsm[TRANSITION_MAPPING[edge]];
             }
-
-
         }
+
+
+        //ramp_motors(current_state->left_duty, current_state->left_direction,
+        //            current_state->right_duty, current_state->right_direction);
+        current_left_duty = current_state->left_duty;
+        current_left_direction = current_state->left_direction;
+        current_right_duty = current_state->right_duty;
+        current_right_direction = current_state->right_direction;
+
         set_color(current_state->color);
 
-        Drive_Motors(current_state->left_duty, current_state->left_direction,
-                     current_state->right_duty, current_state->right_direction);
+        Drive_Motors(current_left_duty, current_left_direction,
+                     current_right_duty, current_right_direction);
 
         //buffer_write_flash_flush(current_state->this_state);
         Clock_Delay1us(10);
-        
-
-
     }
 }
