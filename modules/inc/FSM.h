@@ -139,6 +139,9 @@ enum Edges_e {
 
 struct State {
     enum State_e this_state;
+
+    uint8_t color;
+
     enum State_e off_edge_transition;
 
     //Duties are expected to be in high time percentage

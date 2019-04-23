@@ -1,7 +1,3 @@
-################################################################################
-# Automatically-generated file. Do not edit!
-################################################################################
-
 INC_DIR = /home/yelsek/projects/cosc4331-EmbeddedProgramming/modules/inc
 
 # Each subdirectory must supply rules for building sources it contributes

@@ -22,6 +22,11 @@ void Debug_FlashInit(void){
 
 void Debug_FlashRecord(uint16_t *pt){
     uint8_t ii;
+
+    //TODO: REmove me!
+    if(flash_ptr >= FLASH_BOT)
+        return;
+
     //go through and write 32 bytes at a time
     for(ii=0; ii<(FLASH_BLOCK_SIZE/BYTES_PER_BIT(32)); ii++){
         Flash_Write(flash_ptr, ((uint32_t*)pt)[ii]);
@@ -35,14 +40,14 @@ void Debug_FlashRecord(uint16_t *pt){
 uint16_t Buffer[FLASH_BLOCK_SIZE];
 uint16_t buffer_pos = 0;
 
-uint32_t buffer_write_flash_flush(uint16_t data){
+void buffer_write_flash_flush(uint16_t data){
     if(buffer_pos == 0){
         Buffer[buffer_pos++] = 0xdead;
         Buffer[buffer_pos++] = 0xbeef;
     }
 
     Buffer[buffer_pos++] = data;
-    if(buffer_pos > FLASH_BLOCK_SIZE){
+    if(buffer_pos >= FLASH_BLOCK_SIZE){
         Debug_FlashRecord(Buffer);
         buffer_pos = 0;
         memset(Buffer, 0, FLASH_BLOCK_SIZE);
@@ -50,7 +55,7 @@ uint32_t buffer_write_flash_flush(uint16_t data){
 }
 
 
-uint32_t write_flash_force_flush(uint16_t data){
+void write_flash_force_flush(uint16_t data){
     if(buffer_pos != 0){
         Debug_FlashRecord(Buffer);
         memset(Buffer, 0, FLASH_BLOCK_SIZE);

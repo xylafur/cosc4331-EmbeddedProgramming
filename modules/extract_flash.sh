@@ -1,5 +1,5 @@
 DSLite=/opt/ccstudio/ccsv8/ccs_base/DebugServer/bin/DSLite
-CONFIG=MSP432P401R.ccxml
+CONFIG=/home/yelsek/projects/cosc4331-EmbeddedProgramming/modules/MSP432P401R.ccxml
 
 usage(){
     echo "$0 <start address> <length> [output filename] "

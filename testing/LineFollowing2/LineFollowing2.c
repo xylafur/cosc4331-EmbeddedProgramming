@@ -34,6 +34,7 @@
 #include "../inc/TExaS.h"
 #include "../inc/LaunchPad.h"
 #include "../inc/Reflectance.h"
+#include "../inc/FlashDebug.h"
 
 #include "../inc/CortexM.h"
 
@@ -52,6 +53,8 @@ extern enum State_e TRANSITION_MAPPING [NUM_EDGES];
 int main(){
     Clock_Init48MHz();
     LaunchPad_Init();
+
+    Debug_FlashInit();
 
     DisableInterrupts();
 
@@ -85,10 +88,14 @@ int main(){
 
 
         }
+        set_color(current_state->color);
+
         Drive_Motors(current_state->left_duty, current_state->left_direction,
                      current_state->right_duty, current_state->right_direction);
 
+        //buffer_write_flash_flush(current_state->this_state);
         Clock_Delay1us(10);
+        
 
 
     }

@@ -17,6 +17,8 @@ $(INC_DIR)/CortexM.c \
 $(INC_DIR)/PWM.c \
 $(INC_DIR)/Motor.c \
 $(INC_DIR)/LineInt.c \
+$(INC_DIR)/FlashProgram.c \
+$(INC_DIR)/FlashDebug.c \
 $(INC_DIR)/TimerA2.c \
 $(INC_DIR)/TimerA0.c \
 $(INC_DIR)/FSM.c \
