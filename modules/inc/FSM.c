@@ -257,18 +257,18 @@ uint8_t attempt_values [3][10][4] = {
 
 State_t fsm [NUM_STATES] = {
     //State                 Color   Lost Line Transition    LeftDuty LeftDirection  RightDuty  RightDirection
-    {OFF_LEFT_STATE,        0x7,    OFF_LEFT_STATE,         40,      BACKWARD,       13,        FORWARD},
-    {FAR_LEFT_STATE,        0x4,    OFF_LEFT_STATE,         45,      FORWARD,       15,        FORWARD},
-    {LEFT_STATE,            0x2,    OFF_LEFT_STATE,         40,      FORWARD,       15,        FORWARD},
-    {SLIGHTLY_LEFT_STATE,   0x1,    CENTER_BACKWARD_STATE,  35,      FORWARD,       17,        FORWARD},
+    {OFF_LEFT_STATE,        0x7,    OFF_LEFT_STATE,         50,      BACKWARD,       13,        FORWARD},
+    {FAR_LEFT_STATE,        0x4,    OFF_LEFT_STATE,         55,      FORWARD,       20,        FORWARD},
+    {LEFT_STATE,            0x2,    OFF_LEFT_STATE,         50,      FORWARD,       25,        FORWARD},
+    {SLIGHTLY_LEFT_STATE,   0x1,    CENTER_BACKWARD_STATE,  45,      FORWARD,       30,        FORWARD},
 
-    {CENTER_FORWARD_STATE,  0x0,    CENTER_BACKWARD_STATE,  40,         FORWARD,        40,         FORWARD},
-    {CENTER_BACKWARD_STATE, 0x0,    CENTER_BACKWARD_STATE,  40,         BACKWARD,        40,        BACKWARD},
+    {CENTER_FORWARD_STATE,  0x0,    CENTER_BACKWARD_STATE,  60,         FORWARD,        60,         FORWARD},
+    {CENTER_BACKWARD_STATE, 0x0,    CENTER_BACKWARD_STATE,  60,         BACKWARD,        60,        BACKWARD},
 
-    {SLIGHTLY_RIGHT_STATE,  0x1,    CENTER_BACKWARD_STATE,  17,         FORWARD,        35,         FORWARD},
-    {RIGHT_STATE,           0x2,    OFF_RIGHT_STATE,        15,         FORWARD,        40,         FORWARD},
-    {FAR_RIGHT_STATE,       0x4,    OFF_RIGHT_STATE,        15,         FORWARD,        45,         FORWARD},
-    {OFF_RIGHT_STATE,       0x7,    OFF_RIGHT_STATE,        13,         FORWARD,        40,         BACKWARD}
+    {SLIGHTLY_RIGHT_STATE,  0x1,    CENTER_BACKWARD_STATE,  30,         FORWARD,        45,         FORWARD},
+    {RIGHT_STATE,           0x2,    OFF_RIGHT_STATE,        25,         FORWARD,        50,         FORWARD},
+    {FAR_RIGHT_STATE,       0x4,    OFF_RIGHT_STATE,        20,         FORWARD,        55,         FORWARD},
+    {OFF_RIGHT_STATE,       0x7,    OFF_RIGHT_STATE,        13,         FORWARD,        50,         BACKWARD}
 };
 
 enum State_e TRANSITION_MAPPING [NUM_EDGES] = {
