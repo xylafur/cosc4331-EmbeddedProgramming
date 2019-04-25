@@ -195,3 +195,28 @@ void PWM_Duty4(uint16_t right_duty){
 }
 
 
+
+//***************************PWM_Duty3*******************************
+// change duty cycle of PWM output on P2.6
+// Inputs:  duty3
+// Outputs: none
+// period of P2.6 is 2*period*666.7ns, duty cycle is duty3/period
+void RightMotor_PWM(uint16_t right_duty){
+    if(right_duty > TIMER_A0->CCR[0]){
+        return;
+    }
+    TIMER_A0->CCR[3] = right_duty;
+}
+
+//***************************PWM_Duty4*******************************
+// change duty cycle of PWM output on P2.7
+// Inputs:  duty4
+// Outputs: none// period of P2.7 is 2*period*666.7ns, duty cycle is duty2/period
+void LeftMotor_PWM(uint16_t left_duty){
+    if(left_duty > TIMER_A0->CCR[0]){
+        return;
+    }
+    TIMER_A0->CCR[4] = left_duty;
+}
+
+

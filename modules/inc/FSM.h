@@ -103,6 +103,9 @@ enum Edges edge_encoder(int32_t pos);
 
 enum State_e {
     OFF_LEFT_STATE,
+
+    SUPER_HARD_LEFT_STATE,
+
     FAR_LEFT_STATE,
     LEFT_STATE,
     SLIGHTLY_LEFT_STATE,
@@ -113,7 +116,13 @@ enum State_e {
     SLIGHTLY_RIGHT_STATE,
     RIGHT_STATE,
     FAR_RIGHT_STATE,
+
+    SUPER_HARD_RIGHT_STATE,
+
     OFF_RIGHT_STATE,
+
+    //If the bump sensors are triggered.. just give up for now
+    STALL_STATE,
 
     //Not a real state, but will give us the count of states
     NUM_STATES

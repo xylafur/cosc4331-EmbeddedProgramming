@@ -156,12 +156,28 @@ uint8_t Reflectance_Center(uint32_t time){
 }
 
 
+/*
+ *                                  LINE SENSOR
+ *      LEFT                                                        RIGHT
+ *      ----------------------------------------------------------------
+ *      |   *       *       *       *       *       *       *       *   |
+ *      ----------------------------------------------------------------
+ *          -332    -237    -142    -47     47      142     237     332
+ *
+ *      These values represent the distance from the centor of the sensor in
+ *      milimeters
+ *      
+ */
+
 int32_t W [8] = {332, 237, 142, 47, -47, -142, -237, -332};
 // Perform sensor integration
 // Input: data is 8-bit result from line sensor
+//
+//        LEFT SIDR         RIGHT SIDE
+//  Data: b7 b6 b5 b4 b3 b2 b1 b0
+//
 // Output: position in 0.1mm relative to center of line
 int32_t Reflectance_Position(uint8_t data){
-    // write this as part of Lab 6
     int32_t sum = 0;
     int32_t ones = 0;
     //iterate through the bits of `data` and update sum and ones approprietly

@@ -33,6 +33,7 @@
 #include "../inc/Clock.h"
 #include "../inc/TExaS.h"
 #include "../inc/LaunchPad.h"
+#include "../inc/BumpInt.h"
 #include "../inc/Reflectance.h"
 #include "../inc/FlashDebug.h"
 
@@ -118,6 +119,14 @@ void ramp_motors(uint16_t dest_left_duty, uint8_t dest_left_direction,
 }
 
 
+uint8_t drive_motors = 1;
+
+
+void bump_handler(void){
+    drive_motors = 0;
+    Motor_Stop();
+    DisableInterrupts();
+}
 
 
 int main(){
@@ -144,6 +153,8 @@ int main(){
     current_right_direction = current_state->right_direction;
 
 
+    //BumpInt_Init(&bump_handler);
+
 
     //Everything should be all setup now, lets enable interrupts
     EnableInterrupts();
@@ -154,7 +165,8 @@ int main(){
     uint32_t position;
     uint8_t edge;
 
-    while(1){
+    while(drive_motors){
+
         //We need to change state
         if(last_data_reading != LineSensorData){
             last_data_reading = LineSensorData;

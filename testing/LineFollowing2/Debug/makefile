@@ -13,6 +13,7 @@ ORDERED_OBJS += \
 "./Reflectance.obj" \
 "./LaunchPad.obj" \
 "./Motor.obj" \
+"./BumpInt.obj" \
 "./FlashProgram.obj" \
 "./FlashDebug.obj" \
 "./FSM.obj" \

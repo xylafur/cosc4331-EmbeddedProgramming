@@ -157,6 +157,18 @@ void PWM_Duty3(uint16_t left_duty);
  */
 void PWM_Duty4(uint16_t right_duty);
 
+//***************************PWM_Duty3*******************************
+// change duty cycle of PWM output on P2.6
+// Inputs:  duty3
+// Outputs: none
+// period of P2.6 is 2*period*666.7ns, duty cycle is duty3/period
+void RightMotor_PWM(uint16_t right_duty);
+
+//***************************PWM_Duty4*******************************
+// change duty cycle of PWM output on P2.7
+// Inputs:  duty4
+// Outputs: none// period of P2.7 is 2*period*666.7ns, duty cycle is duty2/period
+void LeftMotor_PWM(uint16_t left_duty);
 
 
 #endif /* PWM_H_ */

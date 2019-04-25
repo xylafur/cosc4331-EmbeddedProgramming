@@ -184,26 +184,25 @@ enum Edges_e get_edge(int32_t pos){
         return OFF_EDGE;
     }
 
-    //Kind of arbitrary groupings..
-    if(pos <= 333 && pos  >= 200) {
+    if(pos <= 333 && pos  >= 284) {
         return FAR_RIGHT_EDGE;
     }
-    if(pos < 200 && pos >= 100){
+    if(pos < 284 && pos >= 190){
         return RIGHT_EDGE;
     }
-    if(pos < 100 && pos >= 3){
+    if(pos < 190 && pos >= 3){
         return SLIGHTLY_RIGHT_EDGE;
     }
     if(pos < 3 && pos >= -2){
         return CENTER_EDGE;
     }
-    if(pos < -3 && pos >= -100){
+    if(pos < -3 && pos >= -190){
         return SLIGHTLY_LEFT_EDGE;
     }
-    if(pos < -100 && pos >= -200){
+    if(pos < -190 && pos >= -284){
         return LEFT_EDGE;
     }
-    if(pos < -200 && pos >= -333){
+    if(pos < -284 && pos >= -333){
         return FAR_LEFT_EDGE;
     }
 
@@ -256,20 +255,44 @@ uint8_t attempt_values [3][10][4] = {
 };
 
 State_t fsm [NUM_STATES] = {
-    //State                 Color   Lost Line Transition    LeftDuty LeftDirection  RightDuty  RightDirection
-    {OFF_LEFT_STATE,        0x7,    OFF_LEFT_STATE,         60,      BACKWARD,       30,        FORWARD},
-    {FAR_LEFT_STATE,        0x4,    OFF_LEFT_STATE,         65,      FORWARD,       40,        FORWARD},
-    {LEFT_STATE,            0x2,    OFF_LEFT_STATE,         70,      FORWARD,       50,        FORWARD},
-    {SLIGHTLY_LEFT_STATE,   0x1,    CENTER_BACKWARD_STATE,  75,      FORWARD,       65,        FORWARD},
+    //State                 Color   Lost Line Transition    LeftDuty    LeftDirection  RightDuty  RightDirection
+    //
+    //OFF THE LINE LEFT STATES
+    {OFF_LEFT_STATE,        0x7,    OFF_LEFT_STATE,         20,         BACKWARD,      80,        FORWARD},
 
+    {SUPER_HARD_LEFT_STATE, 0x0,    SUPER_HARD_LEFT_STATE,  0,          FORWARD,       80,        FORWARD},
+
+
+    //PARTIAL LINE LEFT STATES
+    {FAR_LEFT_STATE,        0x4,    OFF_LEFT_STATE,         0,         FORWARD,         50,        FORWARD},
+
+    {LEFT_STATE,            0x2,    OFF_LEFT_STATE,         50,         FORWARD,       65,        FORWARD},
+
+    {SLIGHTLY_LEFT_STATE,   0x1,    OFF_LEFT_STATE,         65,         FORWARD,       75,        FORWARD},
+
+
+    //CENTER AND BACKWARDS STATES
     {CENTER_FORWARD_STATE,  0x0,    CENTER_BACKWARD_STATE,  80,         FORWARD,        80,         FORWARD},
     {CENTER_BACKWARD_STATE, 0x0,    CENTER_BACKWARD_STATE,  80,         BACKWARD,        80,        BACKWARD},
 
-    {SLIGHTLY_RIGHT_STATE,  0x1,    CENTER_BACKWARD_STATE,  65,         FORWARD,        75,         FORWARD},
-    {RIGHT_STATE,           0x2,    OFF_RIGHT_STATE,        50,         FORWARD,        70,         FORWARD},
-    {FAR_RIGHT_STATE,       0x4,    OFF_RIGHT_STATE,        40,         FORWARD,        65,         FORWARD},
-    {OFF_RIGHT_STATE,       0x7,    OFF_RIGHT_STATE,        20,         FORWARD,        60,         BACKWARD}
+
+    //SEE LINE RIGHT STATES
+    {SLIGHTLY_RIGHT_STATE,  0x1,    OFF_RIGHT_STATE, 80,         FORWARD,        65,         FORWARD},
+
+    {RIGHT_STATE,           0x2,    OFF_RIGHT_STATE,        75,         FORWARD,        65,         FORWARD},
+    {FAR_RIGHT_STATE,       0x4,    OFF_RIGHT_STATE,        65,         FORWARD,        50,         FORWARD},
+
+
+    //OFF LINE RIGHT STATES
+    {SUPER_HARD_RIGHT_STATE,0x0,    SUPER_HARD_RIGHT_STATE, 50,         FORWARD,        0,         FORWARD},
+
+    {OFF_RIGHT_STATE,       0x7,    OFF_RIGHT_STATE,        80,         FORWARD,        0,         BACKWARD},
+
+    //STOP STATE, DOA
+    {STALL_STATE,           0x0,    STALL_STATE,            0,          FORWARD,        0,          FORWARD}
 };
+
+
 
 enum State_e TRANSITION_MAPPING [NUM_EDGES] = {
     FAR_LEFT_STATE,

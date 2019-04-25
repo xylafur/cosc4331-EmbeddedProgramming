@@ -186,6 +186,6 @@ void Drive_Motors(uint16_t left_duty_percent, uint8_t left_direction,
         }
     }
 
-    PWM_Duty3(PERCENT_TO_DUTY_TIME(left_duty_percent));
-    PWM_Duty4(PERCENT_TO_DUTY_TIME(right_duty_percent));
+    RightMotor_PWM(PERCENT_TO_DUTY_TIME(right_duty_percent));
+    LeftMotor_PWM(PERCENT_TO_DUTY_TIME(left_duty_percent));
 }
