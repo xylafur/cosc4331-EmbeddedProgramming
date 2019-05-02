@@ -62,15 +62,23 @@ void PIDProgram(void){
         set_color(0x1);
 
         if(bump){
-            if(bump&0x1){
+            if(bump&0x2){
                 break;
-            }else if(bump&0x2){
+
+            }else if(bump&0x8){
+                set_color(0x2);
+
                 increaseKp();
-            }else if(bump & 0x4){
+            }else if(bump & 0x10){
+                set_color(0x3);
+
                 decreaseKp();
-            }else if(bump & 0x8){
-                write_flash_force_flush((uint16_t)Kp);
+            }else if(bump & 0x20){
+                write_flash_force_flush((uint16_t)((int)Kp));
             }
+
+            Clock_Delay1ms(50);
+
 
         }
     }
@@ -96,6 +104,7 @@ int main(){
     EnableInterrupts();
 
     uint8_t bump = 0;
+    int32_t error;
     uint32_t lr_motor = 0;
     while(1){
         bump = Bump_Read();
@@ -108,9 +117,32 @@ int main(){
         }
 
         long sr = StartCritical();
-        sensor_to_error_buffer(LineSensorData);
-        lr_motor = compute_actuation();
-        Drive_Motors((lr_motor&0xFF00)>>16, 1, lr_motor&0xFF, 1);
+        /*
+        buffer_write_flash_flush(0x3fab);
+        buffer_write_flash_flush(0xdad5);
+        buffer_write_flash_flush((uint16_t)LineSensorData);
+        */
+
+        /*
+        buffer_write_flash_flush(0xb00b);
+        buffer_write_flash_flush(0xF00F);
+        buffer_write_flash_flush((uint16_t)((error&0xFF00)>>16));
+        buffer_write_flash_flush((uint16_t)((error&0xFF)));
+        */
+
+        error = sensor_to_error(LineSensorData);
+        lr_motor = compute_actuation(error);
+        Drive_Motors((uint16_t)(lr_motor&0xFFFF), 1,
+                     (uint16_t)((lr_motor&0xFFFF0000)>>16), 1);
         EndCritical(sr);
+
+        /*
+        buffer_write_flash_flush(0xffff);
+        buffer_write_flash_flush(0x1111);
+        buffer_write_flash_flush((uint16_t)((lr_motor&0xFFFF0000)>>16));
+        buffer_write_flash_flush((uint16_t)((lr_motor&0xFFFF)));
+        */
+
+        Clock_Delay1us(5);
     }
 }
