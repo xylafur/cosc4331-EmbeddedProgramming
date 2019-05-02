@@ -9,9 +9,9 @@
 
 static void *flash_ptr;
 
-void Debug_FlashInit(void){ 
+void Debug_FlashInit(void){
     //we can erase flash as 1 4k block at a time
-    
+
     for(flash_ptr = (void*)FLASH_TOP ; flash_ptr < FLASH_BOT; flash_ptr += _4K){
         Flash_Erase((uint32_t)flash_ptr);
     }

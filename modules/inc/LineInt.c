@@ -30,7 +30,7 @@ void LineSensorIntStart(void){
     HIGH(LINE_SENSOR_LED_PORT, LINE_SENSOR_LED_PIN);
 
     //Start charging the Capacitors on the line sensor
-    MAKE_PORT_OUTPUT(LINE_SENSOR_SENSORS_PORT); 
+    MAKE_PORT_OUTPUT(LINE_SENSOR_SENSORS_PORT);
     WRITE_ONES_PORT(LINE_SENSOR_SENSORS_PORT);
 
     Clock_Delay1us(CAP_CHARGE_TIME_MICRO_SECONDS);
@@ -39,7 +39,7 @@ void LineSensorIntStart(void){
 
     TimerA2_Change_Task(LineSensorIntEnd,
                         MicroS_TO_PERIOD(CAP_DISCHARGE_TIME_MICRO_SECONDS));
- 
+
     EndCritical(sr);
 }
 
@@ -47,7 +47,7 @@ void LineSensorIntEnd(void){
     long sr = StartCritical();
 
     LineSensorData = READ_PORT(LINE_SENSOR_SENSORS_PORT);
-    
+
     //turn off the IR LED
     LOW(LINE_SENSOR_LED_PORT, LINE_SENSOR_LED_PIN);
 

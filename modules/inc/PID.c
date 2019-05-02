@@ -1,4 +1,5 @@
-#define BUFFER_MAX_SIZE 15
+
+#include <stdint.h>
 
 int16_t * error_buffer;
 int16_t error_buffer_size;
@@ -16,6 +17,8 @@ int16_t error_buffer_position;
 #define MAXIMUM_WHEEL_PERCENT 95
 #define MINIMUM_WHEEL_PERCENT 10
 
+#define MAX_BUFFER_SIZE 15
+
 
 float left_wheel_constant;
 float right_wheel_constant;
@@ -31,31 +34,64 @@ void PID_init(){
                                      error_buffer_size - 1 :                \
                                      error_buffer_position])
 
-int16_t sensor_to_error(uint8_t sensor_data){
 
-    //We lost the line.. just assume we're going off the same way
-    if(sensor_data == 0){
-        return PREVIOUS_ERROR;
+#define MAX_ERROR_VALUE (MAX_CONTROL_VALUE / 10)
+#define MIN_ERROR_VALUE (MIN_CONTROL_VALUE / 10)
+
+int8_t error_mapping [8] = {8, 4, 2, 1, -1, -2, -4, -8};
+
+#define SYMETRIC(d) ((((d&0x80)>>7)==(d&0x1)) && (((d&0x40)>>5)==(d&0x2)) &&\
+                             (((d&0x20)>>3)==(d&0x4)) && (((d&0x10)>>1)==(d&0x8)))
+
+/*  This will return a range from MAX_ERROR_VALUE to MIN_ERROR_VALUE
+ */
+int32_t sensor_to_error(uint8_t sensor_data){
+    //We're in the middle
+    if(SYMETRIC(sensor_data)){
+        return 0;
     }
 
-    //TODO: Not sure how to do this..
+    uint8_t ii, jj;
+    int32_t sum = 0, count = 0;
+    for(ii=0, jj=7; ii<8; jj--, ii++){
+        if ((1<<jj) & sensor_data){
+            sum += error_mapping[ii];
+            count++;
+        }
+    }
 
+    return MAX_ERROR_VALUE * sum / (count * 8);
 }
+
+
 
 void sensor_to_error_buffer(uint8_t sensor_data){
     error_buffer[error_buffer_position] = sensor_to_error(sensor_data);
-    error_buffer_position = (error_buffer_position + 1) % BUFFER_MAX_SIZE;
-    if(error_buffer_size < BUFFER_MAX_SIZE){
+    error_buffer_position = (error_buffer_position + 1) % MAX_BUFFER_SIZE;
+
+    if(error_buffer_size < MAX_BUFFER_SIZE){
         error_buffer_size++;
     }
 }
 
+
+
 #define same_sign(a, b) ((a > 0 && b > 0) || (b < 0 && a < 0))
 
 // TODO: Compute these values
-#define Kp
-#define Kd
-#define Ki
+//#define Kp
+//#define Kd
+//#define Ki
+float Kp = 10.0;
+float Kd = 10.0;
+float Ki = 10.0;
+
+void increaseKp(){
+    Kp += 0.5;
+}
+void decreaseKp(){
+    Kp -= 0.5;
+}
 
 uint8_t use_i = 1;
 
@@ -99,10 +135,10 @@ int32_t saturation_clamper(int32_t preClamp){
 uint16_t wheel_equation(uint8_t wheel, uint32_t x){
     //right wheel
     if(wheel){
-        return (uint16_t)(x * right_wheel_constant + MAXMUM_WHEEL_PERCENT)
+        return (uint16_t)(x * right_wheel_constant + MAXIMUM_WHEEL_PERCENT);
     //left wheel
     }else{
-        return (uint16_t)(x * left_wheel_constant + MAXUMUM_WHEEL_PERCENT);
+        return (uint16_t)(x * left_wheel_constant + MAXIMUM_WHEEL_PERCENT);
     }
 }
 
@@ -120,14 +156,14 @@ uint16_t wheel_equation(uint8_t wheel, uint32_t x){
 uint32_t control_to_action(uint32_t control_value){
     uint16_t left_wheel_percent, right_wheel_percent;
     if(control_value == 0){
-        left_wheel_percent = right_wheel_percent = MAXMUM_WHEEL_PERCENT;
+        left_wheel_percent = right_wheel_percent = MAXIMUM_WHEEL_PERCENT;
 
     } else if(control_value > 0){
-        left_wheel_percent = MAXMUM_WHEEL_PERCENT;
+        left_wheel_percent = MAXIMUM_WHEEL_PERCENT;
         right_wheel_percent = wheel_equation(RIGHT, control_value);
 
     }else if(control_value < 0){
-        right_wheel_percent = MAXMUM_WHEEL_PERCENT;
+        right_wheel_percent = MAXIMUM_WHEEL_PERCENT;
         left_wheel_percent = wheel_equation(LEFT, control_value);
     }
 
@@ -140,6 +176,7 @@ uint32_t compute_actuation(){
 
     p = Kp * proportional();
 
+    /*
     if(use_i){
         i = Ki * integral();
     }
@@ -157,6 +194,7 @@ uint32_t compute_actuation(){
     }else{
         use_i = 1;
     }
+    */
 
     return control_to_action(postClamp);
 }
