@@ -130,7 +130,8 @@ int main(){
         buffer_write_flash_flush((uint16_t)((error&0xFF)));
         */
 
-        error = sensor_to_error(LineSensorData);
+        //error = sensor_to_error(LineSensorData);
+        sensor_to_error_buffer(LineSensorData);
         lr_motor = compute_actuation(error);
         Drive_Motors((uint16_t)(lr_motor&0xFFFF), 1,
                      (uint16_t)((lr_motor&0xFFFF0000)>>16), 1);

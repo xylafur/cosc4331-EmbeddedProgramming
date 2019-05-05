@@ -25,19 +25,36 @@ float left_wheel_constant = 0;
 float right_wheel_constant = 0;
 
 void PID_init(){
-    left_wheel_constant =   (MAXIMUM_WHEEL_PERCENT - MINIMUM_WHEEL_PERCENT) /
+    left_wheel_constant =   ((float)MAXIMUM_WHEEL_PERCENT - (float)MINIMUM_WHEEL_PERCENT) /
                             ((float)MAX_CONTROL_VALUE);
-    right_wheel_constant =  (MINIMUM_WHEEL_PERCENT - MAXIMUM_WHEEL_PERCENT) /
+    right_wheel_constant =  ((float)MINIMUM_WHEEL_PERCENT - (float)MAXIMUM_WHEEL_PERCENT) /
                             ((float)MAX_CONTROL_VALUE);
 
+    int32_t temp1 = (int32_t)(100 * left_wheel_constant);
+    int32_t temp2 = (int32_t)(100 * right_wheel_constant);
+
+    buffer_write_flash_flush(0x2222);
+    buffer_write_flash_flush(((temp1&0xFF00)>>16));
+    buffer_write_flash_flush((temp1&0xFF));
+
+    buffer_write_flash_flush(0x3333);
+    buffer_write_flash_flush(((temp2&0xFF00)>>16));
+    buffer_write_flash_flush((temp2&0xFF));
 
     memset(error_buffer, 0, sizeof(int16_t) * MAX_BUFFER_SIZE);
 }
 
+//We want the element before, but if this is element 0 of the array we have to
+//do some special checking because its possible that the buffer hasn't rolled
+//over yet and the last element of the buffer is not yet valid
+#define ERROR error_buffer[error_buffer_position != 0           ?           \
+                           error_buffer_position - 1            :           \
+                           error_buffer_size < MAX_BUFFER_SIZE  ?           \
+                           0    :   MAX_BUFFER_SIZE - 1]
+
 #define PREVIOUS_ERROR (error_buffer[error_buffer_position == 0 ?           \
                                      error_buffer_size - 1 :                \
                                      error_buffer_position])
-
 
 #define MAX_ERROR_VALUE (MAX_CONTROL_VALUE / 10)
 #define MIN_ERROR_VALUE (MIN_CONTROL_VALUE / 10)
@@ -47,9 +64,15 @@ int8_t error_mapping [8] = {8, 4, 2, 1, -1, -2, -4, -8};
 #define SYMETRIC(d) ((((d&0x80)>>7)==(d&0x1)) && (((d&0x40)>>5)==(d&0x2)) &&\
                              (((d&0x20)>>3)==(d&0x4)) && (((d&0x10)>>1)==(d&0x8)))
 
+#define SPECIAL_ERROR (MAX_ERROR_VALUE+1)
+
 /*  This will return a range from MAX_ERROR_VALUE to MIN_ERROR_VALUE
  */
 int32_t sensor_to_error(uint8_t sensor_data){
+    if(sensor_data == 0){
+        return SPECIAL_ERROR;
+    }
+
     //We're in the middle
     if(SYMETRIC(sensor_data)){
         return 0;
@@ -67,12 +90,17 @@ int32_t sensor_to_error(uint8_t sensor_data){
     return MAX_ERROR_VALUE * sum / (count * 8);
 }
 
-#define ERROR error_buffer[(error_buffer_position-1) % MAX_BUFFER_SIZE]
 
 void sensor_to_error_buffer(uint8_t sensor_data){
-    error_buffer[error_buffer_position] = sensor_to_error(sensor_data);
-    error_buffer_position = (error_buffer_position + 1) % MAX_BUFFER_SIZE;
+    int32_t error = sensor_to_error(sensor_data);
 
+    //If we have lost the line, just store the last reading again, we don't
+    //want to assume we've reached the goal state
+    error_buffer[error_buffer_position] = error == SPECIAL_ERROR    ?
+                                          PREVIOUS_ERROR            :
+                                          error;
+
+    error_buffer_position = (error_buffer_position + 1) % MAX_BUFFER_SIZE;
     if(error_buffer_size < MAX_BUFFER_SIZE){
         error_buffer_size++;
     }
@@ -178,20 +206,24 @@ uint32_t compute_actuation(int32_t error){
     int32_t p = 0, i = 0, d = 0, preClamp = 0, postClamp = 0;
     //int16_t e = ERROR;
 
+    /*
     buffer_write_flash_flush(0xbabe);
     buffer_write_flash_flush(0xcafe);
     buffer_write_flash_flush((error&0xFF00)>>16);
     buffer_write_flash_flush((error&0xFF));
+    */
 
 
-    p = Kp * proportional(error);
+    p = Kp * proportional(ERROR);
 
+    /*
     buffer_write_flash_flush(0xcafe);
     buffer_write_flash_flush(0xbabe);
     buffer_write_flash_flush((p&0xFF00)>>16);
     buffer_write_flash_flush((p&0xFF));
     buffer_write_flash_flush(0x1337);
     buffer_write_flash_flush(0xffff);
+    */
     /*
     if(use_i){
         i = Ki * integral();
@@ -211,15 +243,16 @@ uint32_t compute_actuation(int32_t error){
     }
     */
     preClamp = p;
+    postClamp = saturation_clamper(preClamp);
 
+    /*
     buffer_write_flash_flush(0xdead);
     buffer_write_flash_flush(0xbeef);
 
-    postClamp = saturation_clamper(preClamp);
 
     buffer_write_flash_flush((postClamp&0xFF00)>>16);
     buffer_write_flash_flush((postClamp&0xFF));
-
+    */
 
     return control_to_action(postClamp);
 }
